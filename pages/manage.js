@@ -15,7 +15,7 @@ import NavBar from "../src/components/NavBar";
 import { UserContext } from "../src/context/users.context";
 
 export default function Manage() {
-  const { user } = useContext(UserContext);
+  const { user, increaseBalance } = useContext(UserContext);
 
   return (
     <Container sx={{ marginTop: 17 }}>
@@ -27,7 +27,7 @@ export default function Manage() {
               key={user.login.uuid}
               secondaryAction={
                 <Box sx={{ display: "flex" }}>
-                  <IconButton onClick={() => (user.account_balance += 1)}>
+                  <IconButton onClick={() => increaseBalance(user.login.uuid)}>
                     <Add />
                   </IconButton>
                   <IconButton>

@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, useEffect } from "react";
 import axios from "axios";
 
 export const UserContext = createContext();
@@ -35,10 +35,21 @@ const UserContentProvider = (props) => {
       });
   };
 
+  // increase account balance by 1
+  /*
+    - Filter for the user
+    - add to the account balance
+  */
   const increaseBalance = (id) => {
-    user.filter(
-      (user) => user.login.uuid === id && (user.account_balance += 1)
-    );
+    setUser((users) => {
+      return users.filter(
+        (existingUser) =>
+          existingUser.login.uuid === id && {
+            ...users,
+            account_balance: (existingUser.account_balance += 1),
+          }
+      );
+    });
   };
 
   return (
