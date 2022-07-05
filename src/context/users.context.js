@@ -35,8 +35,23 @@ const UserContentProvider = (props) => {
       });
   };
 
+  const increaseBalance = (id) => {
+    user.filter(
+      (user) => user.login.uuid === id && (user.account_balance += 1)
+    );
+  };
+
   return (
-    <UserContext.Provider value={{ user, error, addUser, isLoading }}>
+    <UserContext.Provider
+      value={{
+        user,
+        increaseBalance,
+        error,
+        addUser,
+        isLoading,
+        increaseBalance,
+      }}
+    >
       {props.children}
     </UserContext.Provider>
   );
