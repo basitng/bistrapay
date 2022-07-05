@@ -17,13 +17,8 @@ export default function NavBar() {
         <Box sx={{ flex: 1 }} />
         <Box sx={{ display: "flex" }}>
           {links.map((link) => (
-            <Link href={link.path}>
-              <Typography
-                color="GrayText"
-                sx={{ m: 1 }}
-                key={link.id}
-                variant="body1"
-              >
+            <Link key={link.id} href={link.path}>
+              <Typography color="GrayText" sx={{ m: 1 }} variant="body1">
                 {link.name}
               </Typography>
             </Link>
