@@ -11,6 +11,7 @@ import {
   CircularProgress,
   Backdrop,
 } from "@mui/material";
+import Link from "next/link";
 import { ArrowForwardIos } from "@mui/icons-material";
 import { UserContext } from "../src/context/users.context";
 import { Container } from "@mui/system";
@@ -31,23 +32,30 @@ export default function Users() {
       ) : (
         <List subheader={<Typography variant="body1">Fetched User</Typography>}>
           {user.map((data) => (
-            <ListItem
-              key={data.login.uuid}
-              secondaryAction={
-                <IconButton>
-                  <ArrowForwardIos />
-                </IconButton>
-              }
-              button
+            <Link
+              href={{
+                pathname: `/profile/${data.login.uuid}`,
+                query: data,
+              }}
             >
-              <ListItemText
-                primary={`${data.name.title} ${data.name.first} ${data.name.last}`}
-                secondary={`${data.location.city} in ${data.location.country}`}
-              />
-              <ListItemAvatar>
-                <Avatar src={data.picture.medium} />
-              </ListItemAvatar>
-            </ListItem>
+              <ListItem
+                key={data.login.uuid}
+                secondaryAction={
+                  <IconButton>
+                    <ArrowForwardIos />
+                  </IconButton>
+                }
+                button
+              >
+                <ListItemText
+                  primary={`${data.name.title} ${data.name.first} ${data.name.last}`}
+                  secondary={`${data.location.city} in ${data.location.country}`}
+                />
+                <ListItemAvatar>
+                  <Avatar src={data.picture.medium} />
+                </ListItemAvatar>
+              </ListItem>
+            </Link>
           ))}
         </List>
       )}

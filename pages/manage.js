@@ -15,7 +15,7 @@ import NavBar from "../src/components/NavBar";
 import { UserContext } from "../src/context/users.context";
 
 export default function Manage() {
-  const { user, increaseBalance } = useContext(UserContext);
+  const { user, increaseBalance, decreaseBalance } = useContext(UserContext);
 
   return (
     <Container sx={{ marginTop: 17 }}>
@@ -30,7 +30,7 @@ export default function Manage() {
                   <IconButton onClick={() => increaseBalance(user.login.uuid)}>
                     <Add />
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={() => decreaseBalance(user.login.uuid)}>
                     <Remove />
                   </IconButton>
                 </Box>

@@ -37,30 +37,53 @@ const UserContentProvider = (props) => {
 
   // increase account balance by 1
   /*
-    - Filter for the user
-    - add to the account balance
+    change only one uservalue
   */
   const increaseBalance = (id) => {
-    setUser((users) => {
-      return users.filter(
-        (existingUser) =>
-          existingUser.login.uuid === id && {
-            ...users,
-            account_balance: (existingUser.account_balance += 1),
-          }
-      );
+    const updatedUsers = user.map((user) => {
+      if (user.login.uuid === id) {
+        return {
+          ...user,
+          account_balance: user.account_balance + 1000,
+        };
+      } else {
+        return user;
+      }
     });
+    setUser(updatedUsers);
+  };
+  const decreaseBalance = (id) => {
+    const updatedUsers = user.map((user) => {
+      if (user.login.uuid === id) {
+        return {
+          ...user,
+          account_balance: user.account_balance - 1000,
+        };
+      } else {
+        return user;
+      }
+    });
+    setUser(updatedUsers);
   };
 
+  const getUserProfile = (userId) => {
+    const newUser = user.filter((person) =>
+      person.login.uuid === userId ? person : console.log("No user")
+    );
+
+    return { ...newUser };
+  };
   return (
     <UserContext.Provider
       value={{
         user,
         increaseBalance,
+        decreaseBalance,
+        getUserProfile,
         error,
         addUser,
         isLoading,
-        increaseBalance,
+        setUser,
       }}
     >
       {props.children}

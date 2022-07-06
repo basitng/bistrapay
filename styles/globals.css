@@ -29,3 +29,9 @@ form {
   border: 1px solid var(--outline);
   border-radius: 10px;
 }
+@media screen and (max-width: 600px) {
+  form {
+    padding: 50px 10px;
+    width: 100%;
+  }
+}

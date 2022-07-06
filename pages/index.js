@@ -13,7 +13,7 @@ import NavBar from "../src/components/NavBar";
 import { UserContext } from "../src/context/users.context";
 
 function Home() {
-  const { user, isLoading, addUser } = useContext(UserContext);
+  const { addUser, isLoading } = useContext(UserContext);
 
   const handleClick = () => {
     addUser();
@@ -22,13 +22,22 @@ function Home() {
   return (
     <React.Fragment>
       <NavBar />
-      <Box sx={{ mt: 8, p: 10 }}>
+      <Box
+        sx={{
+          mt: 8,
+          p: 10,
+          "@media screen and (max-width: 600px)": {
+            p: 2,
+            mt: 10,
+          },
+        }}
+      >
         {isLoading && (
           <LinearProgress
             sx={{
               position: "fixed",
-              Zindex: 1000000,
-              bottom: 0,
+              Zindex: 1000,
+              top: 0,
               left: 0,
               width: "100%",
             }}
@@ -61,7 +70,7 @@ function Home() {
             </form>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Users user={user} />
+            <Users />
           </Grid>
         </Grid>
       </Box>
