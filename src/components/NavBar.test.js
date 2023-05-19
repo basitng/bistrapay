@@ -1,0 +1,1 @@
+Generated unit test for NavBar.test.js
