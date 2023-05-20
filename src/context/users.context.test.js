@@ -1,1 +1,1 @@
-Generated unit test for NavBar.test.test.js
+Generated unit test for index.test.js
