@@ -1,1 +1,1 @@
-Generated unit test for manage.test.test.js
+Generated unit test for [profile].test.js
