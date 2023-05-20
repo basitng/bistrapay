@@ -1,1 +1,1 @@
-Generated unit test for users.test.test.js
+Generated unit test for NavBar.test.js
