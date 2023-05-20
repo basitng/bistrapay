@@ -1,1 +1,1 @@
-Generated unit test for hello.test.test.js
+Generated unit test for index.test.js
