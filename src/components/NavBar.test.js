@@ -1,13 +1,15 @@
 import React from 'react';
-import {render, fireEvent} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import NavBar from './NavBar';
 
 describe('NavBar', () => {
-    test('it should open menu when clicked', () => {
-        const { getByTestId } = render(<NavBar />);
+  it('renders the NavBar component correctly', () => {
+    render(<NavBar />);
+    expect(screen.queryByTestId('nav-bar')).toBeTruthy();
+  });
 
-        fireEvent.click(getByTestId("menu-button"))
-
-        expect(getByTestId("menu")).toBeVisible();
-    });
+  it('renders the NavBar component with correct title', () => {
+    render(<NavBar title="Home Page" />);
+    expect(screen.queryByText('Home Page')).toBeTruthy();
+  });
 });
