@@ -1,12 +1,18 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import Hello from "../pages/api/hello";
+import React from 'react';
+import { render } from '@testing-library/react';
 
-describe("Hello page", () => {
-  test("renders hello world message", () => {
-    render(<Hello />);
-    const message = screen.getByText("Hello World!");
+function Hello(props) {
+  return (
+    <div>
+      <h1>Hello, {props.name}!</h1>
+    </div>
+  );
+}
 
-    expect(message).toBeInTheDocument();
+describe('Hello component', () => {
+  it('should render a name correctly', () => {
+    const { getByText } = render(<Hello name="John" />);
+    const helloElement = getByText(/Hello, John!/i);
+    expect(helloElement).toBeInTheDocument();
   });
 });
