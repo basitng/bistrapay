@@ -1,26 +1,41 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import Profile from './Profile';
+import  Profile  from "./[profile]";
 
-describe('Profile component', () => {
-  it('should render the profile name', () => {
-    const { getByText } = render(<Profile name="John Doe" />);
-    const profileName = getByText('John Doe');
-    expect(profileName).toBeInTheDocument();
+describe('[Profile]', () => {
+  let component;
+
+  beforeEach(() => {
+    component = window.render(<Profile />);
   });
 
-  it('should render a button to edit the profile', () => {
-    const { getByTestId } = render(<Profile />);
-    const editButton = getByTestId('edit-button');
-    expect(editButton).toBeInTheDocument();
-    expect(editButton.textContent).toBe('Edit Profile');
+  it('should render a profile page component', () => {
+    expect(component.container).toBeInTheDocument();
   });
 
-  it('should call the onEdit prop when the edit button is clicked', () => {
-    const onEditMock = jest.fn();
-    const { getByTestId } = render(<Profile onEdit={onEditMock} />);
-    const editButton = getByTestId('edit-button');
-    fireEvent.click(editButton);
-    expect(onEditMock).toHaveBeenCalledTimes(1);
+  it('should contain a header with the title of the page', () => {
+    const header = component.getByText('Profile');
+    expect(header).toBeInTheDocument();
+  });
+
+  it('should contain a form to edit the user profile', () => {
+    const form = component.container.querySelector('form');
+    expect(form).toBeInTheDocument();
+  });
+
+  it('should contain fields to update the user profile information', () => {
+    const nameInput = component.container.querySelector(
+      'input[name="name"]'
+    );
+    expect(nameInput).toBeInTheDocument();
+
+    const emailInput = component.container.querySelector(
+      'input[name="email"]'
+    );
+    expect(emailInput).toBeInTheDocument();
+  });
+
+  it('should have a button to submit the form', () => {
+    const submitButton = component.container.querySelector('button');
+    expect(submitButton).toBeInTheDocument();
   });
 });
