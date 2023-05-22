@@ -1,20 +1,28 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import NavBar from './NavBar';
+import React from "react";
+import { render, fireEvent } from "@testing-library/react";
+import NavBar from "./NavBar";
 
-describe('NavBar', () => {
-  test('should render properly', () => {
+describe("NavBar component", () => {
+  it("should render correctly", () => {
     const { getByTestId } = render(<NavBar />);
-    const navBar = getByTestId('navBar');
-    expect(navBar).toBeInTheDocument();
+    expect(getByTestId("navbar")).toBeInTheDocument();
   });
 
-  test('should collapse the nav bar on click of the toggle button', () => {
-    const { getByTestId } = render(<NavBar />);
-    const toggleButton = getByTestId('toggleButton');
-    fireEvent.click(toggleButton);
+  it("should show the correct number of navigation links", () => {
+    const { getAllByTestId } = render(<NavBar />);
+    expect(getAllByTestId("nav-link")).toHaveLength(3);
+  });
 
-    const navBar = getByTestId('navBar');
-    expect(navBar).toHaveClass('collapse');
+  it("should show the correct navigation link text", () => {
+    const { getByText } = render(<NavBar />);
+    expect(getByText("Home")).toBeInTheDocument();
+    expect(getByText("About")).toBeInTheDocument();
+    expect(getByText("Contact")).toBeInTheDocument();
+  });
+
+  it("should open the dropdown menu when the hamburger icon is clicked", () => {
+    const { getByTestId, getByRole } = render(<NavBar />);
+    fireEvent.click(getByTestId("hamburger-icon"));
+    expect(getByRole("listbox")).toBeInTheDocument();
   });
 });
