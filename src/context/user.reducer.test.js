@@ -1,38 +1,63 @@
-import React from 'react';
-import { render, fireEvent, getByTestId } from "@testing-library/react";
-import userReducer from './user.reducer';
+import { userReducer } from './user.reducer';
+    import {
+    LOGIN_USER_REQUEST, LOGIN_USER_FAILED, LOGIN_USER_SUCCESS
+    } from '../actions/user.action';
 
-describe('user reducer', () => {
+import { act } from "@testing-library/react";
+
+describe("User Reducer", () => {
   let state;
+
   beforeEach(() => {
     state = {
-      users: [
-        {
-          id: "9609ab1d-b2b8-4a5f-a9d3-3a3a390a19e8",
-          email: "doug@example.com",
-          username: "doug"
-        }
-      ]
+      loading: false,
+      user: null,
+      error: "",
     };
   });
 
-  it('should add a new user', () => {
+  it("LOGIN_USER_REQUEST", () => {
     const action = {
-      type: 'CREATE_USER',
-      payload: {
-        id: '123123asd',
-        email: 'test@example.com',
-        username: 'testuser'
-      }
+      type: LOGIN_USER_REQUEST,
     };
+    const result = userReducer(state, action);
+    expect(result).toEqual({
+      loading: true,
+      user: null,
+      error: "",
+    });
+  });
 
-    // Act 
-    const newState = userReducer(state, action);
+  it("LOGIN_USER_FAILED", () => {
+    const payload = {
+      message: "error occuered",
+    };
+    const action = {
+      type: LOGIN_USER_FAILED,
+      payload,
+    };
+    const result = userReducer(state, action);
+    expect(result).toEqual({
+      loading: false,
+      user: null,
+      error: payload.message,
+    });
+  });
 
-    // Assert
-    expect(newState.users).toHaveLength(2);
-    expect(newState.users[1].id).toBe('123123asd');
-    expect(newState.users[1].email).toBe('test@example.com');
-    expect(newState.users[1].username).toBe('testuser');
+  it("LOGIN_USER_SUCCESS", () => {
+    const payload = {
+      name: "John Doe",
+      email: "john@doe.com",
+    };
+    const action = {
+      type: LOGIN_USER_SUCCESS,
+      payload,
+    };
+    const result = userReducer(state, action);
+    expect(result).toEqual({
+      loading: false,
+      user: payload,
+      error: "",
+    });
   });
 });
