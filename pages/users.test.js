@@ -1,11 +1,10 @@
-import React from 'react'; 
-import { render } from '@testing-library/react';
-import Users from './users';
- 
-describe('Users component', () => {
-  it('renders name successfully', () => {
-    const { getByText } = render(<Users />);
-    const userNameNode = getByText('John Doe');
-    expect(userNameNode).toBeInTheDocument();
-  });
+import React from 'react';
+import { render, screen } from '@testing-library/react'; 
+
+test('user component is rendered', () => {
+  render(<User />);
+  
+  expect(screen.getByText('Username: John Doe')).toBeInTheDocument(); 
+  expect(screen.getByTestId('user-avatar')).toBeInTheDocument();
+  expect(screen.getByText('john.doe@example.com')).toBeInTheDocument(); 
 });
