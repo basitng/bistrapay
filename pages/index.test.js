@@ -1,25 +1,26 @@
 import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import App from './App';
 
-const Index = () => {
-   return (
-      <div>
-         <h1>Index Page</h1>
-      </div>
-   );
-}
+describe('App component', () => {
+    it('should render the App component', () => {
+        const { getByText } = render(<App />);
+        const appTitle = getByText('My App');
+        expect(appTitle).toBeInTheDocument();
+    });
 
-export default Index;
+    it('should have a button that says "Click me!"', () => {
+        const { getByText } = render(<App />);
+        const clickMeButton = getByText('Click me!');
+        expect(clickMeButton).toBeInTheDocument();
+    });
 
-import React from 'react';
-import { render, cleanup } from '@testing-library/react';
-import Index from './index';
+    it('should update the text when the button is clicked', () => {
+        const { getByText } = render(<App />);
+        const clickMeButton = getByText('Click me!');
+        fireEvent.click(clickMeButton);
 
-afterEach(cleanup);
-
-describe('Index page', () => {
-   it('Render Index page', () => {
-      const { getByText } = render(<Index />);
-      const indexElement = getByText(/Index Page/i);
-      expect(indexElement).toBeInTheDocument();
-   });
+        const updatedText = getByText('You clicked the button!');
+        expect(updatedText).toBeInTheDocument();
+    });
 });
