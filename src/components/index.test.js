@@ -1,26 +1,28 @@
 import React from 'react';
-import {render, fireEvent, waitForElement} from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
+import Navigation from './Navigation';
 
-let App = () => {
-  return(
-    <div>
-      <input id="signInForm-username" type="text" placeholder="Username"></input>
-      <input id="signInForm-password" type="password" placeholder="Password"></input>
-      <button type="submit">Sign In</button>
-    </div>
-  );
-};
+describe('Navigation component', () => {
+  test('should render properly', () => {
+    const { container } = render(<Navigation />);
+    expect(container.firstChild).toBeDefined();
+  });
 
-test('Sign In form works correctly', async () => {
-  const { getByPlaceholderText, getByText } = render(<App />);
+  test('should invoke click handler on navigation links', () => {
+    const handleClick = jest.fn();
+    const { getByText } = render(
+      <Navigation activeItem="home" handleClick={handleClick}/>
+    );
+    fireEvent.click(getByText('Home'));
+    fireEvent.click(getByText('About'));
+    expect(handleClick).toHaveBeenCalledTimes(2);
+  });
 
-  const usernameInput = getByPlaceholderText('Username');
-  const passwordInput = getByPlaceholderText('Password');
-  fireEvent.change(usernameInput, { target: {value: 'JohnDoe'} });
-  fireEvent.change(passwordInput, { target: {value: 'pa$$w0rd'} });
-  const signInButton = getByText('Sign In');
-  fireEvent.click(signInButton);
-
-  const successMessage = await waitForElement(() => getByText("You have successfully logged in!"));
-  expect(successMessage).toBeInTheDocument();
+  test('should set active style on item with activeItem prop', () => {
+    const { getByText } = render(
+      <Navigation activeItem="home" handleClick={() => {}}/>
+    );
+    const link = getByText('Home');
+    expect(link.parentElement.classList).toContain('active');
+  });
 });
