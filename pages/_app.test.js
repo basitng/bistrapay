@@ -1,22 +1,10 @@
 import React from 'react';
+    import App from './_app';
 
-const App = () => {
-  return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
-  );
-};
-
-export default App;
-
-import { render } from '@testing-library/react';
-
-describe('App', () => {
-  test('render App component without crashing', () => {
-    const { getByText } = render(<App />);
-    const h1 = getByText(/hello world/i);
-
-    expect(h1).toBeInTheDocument();
-  });
-});
+    describe('App component', () => {
+      it('should render', () => {
+        const { container } = render(<App />);
+        expect(container).not.toBeNull();
+        expect(container.firstChild).toMatchSnapshot();
+      });
+    });
