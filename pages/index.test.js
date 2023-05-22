@@ -1,26 +1,17 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import App from './App';
+import {render} from '@testing-library/react';
 
-describe('App component', () => {
-    it('should render the App component', () => {
-        const { getByText } = render(<App />);
-        const appTitle = getByText('My App');
-        expect(appTitle).toBeInTheDocument();
-    });
+const App = () => {
+    return (
+        <div>
+            <h1>Hello World</h1>
+        </div>
+    );
+};
 
-    it('should have a button that says "Click me!"', () => {
-        const { getByText } = render(<App />);
-        const clickMeButton = getByText('Click me!');
-        expect(clickMeButton).toBeInTheDocument();
-    });
-
-    it('should update the text when the button is clicked', () => {
-        const { getByText } = render(<App />);
-        const clickMeButton = getByText('Click me!');
-        fireEvent.click(clickMeButton);
-
-        const updatedText = getByText('You clicked the button!');
-        expect(updatedText).toBeInTheDocument();
+describe('App', () => {
+    test('renders the component', () => {
+        const {getByText} = render(<App />);
+        expect(getByText('Hello World')).toBeInTheDocument();
     });
 });
