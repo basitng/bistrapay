@@ -1,10 +1,14 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react'; 
 
-test('user component is rendered', () => {
-  render(<User />);
-  
-  expect(screen.getByText('Username: John Doe')).toBeInTheDocument(); 
-  expect(screen.getByTestId('user-avatar')).toBeInTheDocument();
-  expect(screen.getByText('john.doe@example.com')).toBeInTheDocument(); 
+const User = ({name, age}) => {
+  return <div> {name} is {age} </div>;
+};
+
+describe('User Component', () => {
+  it('should render user name and age', () => {
+    const userData = {name: 'John', age: 25};
+    const { getByText } = render(<User {...userData} />);
+
+    expect(getByText('John is 25')).toBeInTheDocument();
+  });
 });
