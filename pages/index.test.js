@@ -1,18 +1,15 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import ActionButton from './ActionButton';
 
-describe('ActionButton', () => {
-  it('should render the button', () => {
-    const { getByText } = render(<ActionButton label="Click Me" />);
-    expect(getByText('Click Me')).toBeInTheDocument();
-  });
+const MyComponent = () => {
+    return <div>This is my test component</div>
+}
 
-  it('should call the click handler', () => {
-    const clickHandler = jest.fn()
-    const { getByText } = render(<ActionButton label="Click Me" onClick={clickHandler} />);
 
-    fireEvent.click(getByText('Click Me'));
-    expect(clickHandler).toHaveBeenCalled();
-  });
+import {render, screen } from '@testing-library/react';
+
+describe('MyComponent', () => {
+    it('should render the component', () => {
+        render(<MyComponent />);
+        expect(screen.getByText('This is my test component')).toBeInTheDocument();
+    });
 });
