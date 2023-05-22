@@ -1,50 +1,41 @@
-// import React from 'react';
-import { useState } from 'react';
+import React from 'react';
 
 const App = () => {
-  const [count, setCount] = useState(0);
+  const [name, setName] = useState('');
+  const [age, setAge] = useState(0);
 
-  const incrementCount = () => setCount(count + 1);
+  const handleChangeName = (event) => {
+    setName(event.target.value);
+  };
 
-  const decrementCount = () => setCount(count - 1);
+  const handleChangeAge = (event) => {
+    setAge(event.target.value);
+  };
 
   return (
     <div>
-      <h1>Count: {count}</h1>
-      <button onClick={incrementCount}>+</button>
-      <button onClick={decrementCount}>-</button>
+      <input type="text" onChange={handleChangeName} />
+      <input type="number" onChange={handleChangeAge} />
     </div>
   );
 };
 
-export default App;
+// Unit test with React Testing Library
+import { render, fireEvent, screen } from '@testing-library/react';
 
-// Unit test using React Testing Library
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import App from './_app'
-
-describe('The App component', () => {
-  test('Renders the counter', () => {
+describe('<App />', () => {
+  test('should change name when user enters name', () => {
     render(<App />);
-    // Assertions
-    expect(screen.getByRole('heading')).toHaveTextContent('Count: 0')
-  })
+    const nameInput = screen.getByRole('textbox');
+    fireEvent.change(nameInput, { target: { value: 'John' } });
+    expect(nameInput.value).toBe('John');
+  });
 
-  test('Increments the counter', () => {
+  test('should change age when user enters age', () => {
     render(<App />);
-    screen.getByRole('button', {name: '+'}).click()
+    const ageInput = screen.getByRole('spinbutton');
+    fireEvent.change(ageInput, { target: { value: 15 } });
+    expect(ageInput.value).toBe(15);
+  });
     
-    // Assertions
-    expect(screen.getByRole('heading')).toHaveTextContent('Count: 1')
-  })
-
-  test('Decrements the counter', () => {
-    render(<App />);
-    screen.getByRole('button', {name: '-'}).click()
-    
-    // Assertions
-    expect(screen.getByRole('heading')).toHaveTextContent('Count: -1')
-  })
-
-})
+});
