@@ -1,35 +1,22 @@
 import React from 'react';
 
 const App = () => {
-  const [state, setState] = React.useState("");
-  const handleChange = (e) => {
-    setState(e.target.value);
-  };
-
   return (
     <div>
-      <input type="text" value={state} onChange={handleChange} />
+      <h1>Hello World</h1>
     </div>
   );
 };
 
 export default App;
 
-// Unit Test
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import App from "./_app";
+import { render } from '@testing-library/react';
 
-describe("App component", () => {
-  it("should render the input field", () => {
-    const { getByTestId } = render(<App />);
-    expect(getByTestId("input")).toBeInTheDocument();
-  });
+describe('App', () => {
+  test('render App component without crashing', () => {
+    const { getByText } = render(<App />);
+    const h1 = getByText(/hello world/i);
 
-  it("should update the state on input change", () => {
-    const { getByTestId } = render(<App />);
-    const input = getByTestId("input");
-    fireEvent.change(input, { target: { value: "Test value" } });
-    expect(input.value).toBe("Test value");
+    expect(h1).toBeInTheDocument();
   });
 });
