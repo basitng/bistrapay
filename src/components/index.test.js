@@ -1,24 +1,18 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import Index from './index';
 
-describe('Index component', () => {
-  afterEach(cleanup);
+describe('Index Component', () => {
+    test('renders Index component', () => {
+        const { getByText } = render(<Index />);
+        const linkElement = getByText(/Index/i);
+        expect(linkElement).toBeInTheDocument();
+    });
 
-  it('should render without crashing', () => {
-    const { container } = render(<Index />);
-    expect(container).toBeTruthy();
-  });
-
-  it('should render a div', () => {
-    const { container } = render(<Index />);
-    const div = container.querySelector('div');
-    expect(div).toBeTruthy();
-  });
-
-  it('should render the correct text', () => {
-    const { getByText } = render(<Index />);
-    const text = getByText('This is the index component.');
-    expect(text).toBeTruthy();
-  });
+    test('check whether the button is clickable', () => {
+        const { getByText } = render(<Index />);
+        const buttonElement = getByText(/Click me/i);
+        fireEvent.click(buttonElement);
+        expect(buttonElement).toBeInTheDocument();
+    });
 });
