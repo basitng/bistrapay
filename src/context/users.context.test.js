@@ -1,63 +1,28 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { UsersContext } from './users.context';
+import { UserContext } from './users.context';
 
-describe('UsersContext', () => {
-  it('should render the context properly', () => {
-    const initialState = {
-      users: [],
-      isLoading: true
-    };
-    
-    const { getByTestId } = render(
-      <UsersContext.Provider value={initialState}>
-        <div data-testid="context-wrapper">
-          <h1>Users Context</h1>
-        </div>
-      </UsersContext.Provider>
+describe('UserContext component', () => {
+  it('should render its children', () => {
+    const { queryByText } = render(
+      <UserContext>
+        <div>Test</div>
+      </UserContext>
     );
-
-    const contextWrapper = getByTestId('context-wrapper');
-    expect(contextWrapper).toBeInTheDocument();
+    expect(queryByText('Test')).not.toBeNull();
   });
 
-  it('should update state when an action is fired', () => {
-    const initialState = {
-      users: [],
-      isLoading: true
-    };
-    
-    const mockAction = {
-      type: 'set-users',
-      payload: [
-        { id: 1, name: 'John Doe' },
-        { id: 2, name: 'Jane Doe' }
-      ]
-    };
-    
-    const reducer = (state, action) => {
-      switch (action.type) {
-        case 'set-users':
-          return {
-            ...state,
-            users: action.payload,
-            isLoading: false
-          };
-        default:
-          return state;
-      }
-    }
-    
-    const { getByTestId } = render(
-      <UsersContext.Provider value={{...initialState, reducer}}>
-        <div data-testid="context-wrapper">
-          <h1>Users Context</h1>
-        </div>
-      </UsersContext.Provider>
+  it('should update the context value when a button is clicked', () => {
+    const { queryByText } = render(
+      <UserContext>
+        <button>Change value</button>
+      </UserContext>
     );
-    
-    fireEvent.click(getByTestId('context-wrapper'));
-    expect(initialState.isLoading).toBe(false);
-    expect(initialState.users).toEqual(mockAction.payload);
+
+    const button = queryByText('Change value');
+    expect(button).not.toBeNull();
+
+    fireEvent.click(button);
+    expect(UserContext.value).toBe('changed');
   });
 });
