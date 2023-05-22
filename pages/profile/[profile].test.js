@@ -1,41 +1,32 @@
 import React from 'react';
-import  Profile  from "./[profile]";
+import { render, fireEvent } from '@testing-library/react';
+import Profile from './profile';
 
-describe('[Profile]', () => {
-  let component;
+describe('Profile', () => {
+  it('displays a display name when given', () => {
+    // Arrange
+    const displayName = 'John Doe';
 
-  beforeEach(() => {
-    component = window.render(<Profile />);
+    // Act
+    const { getByText } = render(<Profile displayName={displayName} />);
+
+    // Assert
+    const displayNameElement = getByText(displayName);
+    expect(displayNameElement).toBeInTheDocument();
   });
 
-  it('should render a profile page component', () => {
-    expect(component.container).toBeInTheDocument();
-  });
+  it('changes the display name when clicked', () => {
+    // Arrange
+    const initialDisplayName = 'John Doe';
+    const changedDisplayName = 'Jane Doe';
 
-  it('should contain a header with the title of the page', () => {
-    const header = component.getByText('Profile');
-    expect(header).toBeInTheDocument();
-  });
+    // Act
+    const { getByText, getByTestId } = render(<Profile displayName={initialDisplayName} />);
 
-  it('should contain a form to edit the user profile', () => {
-    const form = component.container.querySelector('form');
-    expect(form).toBeInTheDocument();
-  });
+    fireEvent.click(getByTestId('change-name-button'));
 
-  it('should contain fields to update the user profile information', () => {
-    const nameInput = component.container.querySelector(
-      'input[name="name"]'
-    );
-    expect(nameInput).toBeInTheDocument();
-
-    const emailInput = component.container.querySelector(
-      'input[name="email"]'
-    );
-    expect(emailInput).toBeInTheDocument();
-  });
-
-  it('should have a button to submit the form', () => {
-    const submitButton = component.container.querySelector('button');
-    expect(submitButton).toBeInTheDocument();
+    // Assert
+    const displayNameElement = getByText(changedDisplayName);
+    expect(displayNameElement).toBeInTheDocument();
   });
 });
