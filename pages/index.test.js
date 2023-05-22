@@ -1,15 +1,10 @@
-import React from 'react';
+import React from 'react'; 
+import { render, screen } from '@testing-library/react';
 
-const MyComponent = () => {
-    return <div>This is my test component</div>
-}
-
-
-import {render, screen } from '@testing-library/react';
-
-describe('MyComponent', () => {
-    it('should render the component', () => {
-        render(<MyComponent />);
-        expect(screen.getByText('This is my test component')).toBeInTheDocument();
-    });
+describe('pages/index.js', () => {
+  it('displays the welcome message', () => {  
+    render(<div>Welcome to my web page</div>);
+    const welcomeMessage = screen.getByText('Welcome to my web page');
+    expect(welcomeMessage).toBeInTheDocument();
+  });
 });
