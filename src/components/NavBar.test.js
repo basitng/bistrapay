@@ -2,25 +2,19 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import NavBar from './NavBar';
 
-describe('NavBar Component', () => {
-  it('Should render the navbar', () => {
-    const { getByText } = render(<NavBar />);
-  
-    expect(getByText('Home')).toBeInTheDocument();
-    expect(getByText('About')).toBeInTheDocument();
-    expect(getByText('Contact')).toBeInTheDocument();
+describe('NavBar', () => {
+  test('should render properly', () => {
+    const { getByTestId } = render(<NavBar />);
+    const navBar = getByTestId('navBar');
+    expect(navBar).toBeInTheDocument();
   });
 
-  it('Should navigate to the correct page when clicking a link', () => {
-    const { getByText } = render(<NavBar />);
-  
-    fireEvent.click(getByText('Home'));
-    expect(window.location.href).toMatch(/\/home/);
-  
-    fireEvent.click(getByText('About'));
-    expect(window.location.href).toMatch(/\/about/);
-  
-    fireEvent.click(getByText('Contact'));
-    expect(window.location.href).toMatch(/\/contact/);
+  test('should collapse the nav bar on click of the toggle button', () => {
+    const { getByTestId } = render(<NavBar />);
+    const toggleButton = getByTestId('toggleButton');
+    fireEvent.click(toggleButton);
+
+    const navBar = getByTestId('navBar');
+    expect(navBar).toHaveClass('collapse');
   });
 });
