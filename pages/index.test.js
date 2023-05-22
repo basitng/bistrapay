@@ -1,31 +1,25 @@
 import React from 'react';
 
-const IndexPage = () => {
-  const [name, setName] = React.useState('');
+const Index = () => {
+   return (
+      <div>
+         <h1>Index Page</h1>
+      </div>
+   );
+}
 
-  const handleChange = (event) => {
-    setName(event.target.value);
-  };
-
-  return (
-    <div>
-      <input type="text" onChange={handleChange} />
-      <p>Hello, {name}!</p>
-    </div>
-  );
-};
-
-export default IndexPage;
+export default Index;
 
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import IndexPage from './index';
+import { render, cleanup } from '@testing-library/react';
+import Index from './index';
 
-test('it should display the name when entered in the input', () => {
-  const { getByText, getByPlaceholderText } = render(<IndexPage />);
+afterEach(cleanup);
 
-  const input = getByPlaceholderText('Name');
-  fireEvent.change(input, { target: { value: 'John' } });
-
-  expect(getByText('Hello, John!')).toBeInTheDocument();
+describe('Index page', () => {
+   it('Render Index page', () => {
+      const { getByText } = render(<Index />);
+      const indexElement = getByText(/Index Page/i);
+      expect(indexElement).toBeInTheDocument();
+   });
 });
