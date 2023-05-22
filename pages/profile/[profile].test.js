@@ -1,29 +1,32 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import Profile from "../Profile";
+import { render, fireEvent } from "@testing-library/react";
+import Profile from "./profile";
 
-describe("Profile", () => {
-  it("renders the correct profile title", () => {
-    const profileTitle = "My Profile";
-    render(<Profile title={profileTitle} />);
-
-    expect(screen.getByText(profileTitle)).toBeInTheDocument();
+describe("Profile Component", () => {
+  test("Renders the profile component", () => {
+    const { getByText } = render(<Profile />);
+    getByText("User Profile");
   });
 
-  it("renders the correct profile description", () => {
-    const profileDescription = "This is my profile";
-    render(<Profile description={profileDescription} />);
-
-    expect(screen.getByText(profileDescription)).toBeInTheDocument();
+  test("Renders the user info correctly", () => {
+    const { getByText } = render(<Profile />);
+    getByText("Name: John Doe");
+    getByText("Age: 28");
+    getByText("Occupation: Software Engineer");
   });
 
-  it("renders the correct profile image", () => {
-    const profileImage = "image.jpg";
-    render(<Profile image={profileImage} />);
+  test("Clicking the 'Edit' button should toggle the edit form", () => {
+    const { getByText, getByTestId } = render(<Profile />);
 
-    expect(screen.getByAltText("Profile Image")).toHaveAttribute(
-      "src",
-      profileImage
-    );
+    // Initially, the edit form should not be visible
+    expect(getByTestId("edit-form")).not.toBeVisible();
+
+    // Clicking the 'Edit' button should make the form visible
+    fireEvent.click(getByText("Edit"));
+    expect(getByTestId("edit-form")).toBeVisible();
+
+    // Clicking the 'Cancel' button should hide the form
+    fireEvent.click(getByText("Cancel"));
+    expect(getByTestId("edit-form")).not.toBeVisible();
   });
 });
