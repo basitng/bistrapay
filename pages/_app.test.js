@@ -1,17 +1,50 @@
-import React from 'react';
-import { render } from '@testing-library/react';
+// import React from 'react';
+import { useState } from 'react';
 
-describe('App component', () => {
-  test('renders without errors', () => {
-    const { queryByTestId } = render(<App />);
-    const component = queryByTestId('app-component'); 
-    expect(component).toBeInTheDocument();
-  });
+const App = () => {
+  const [count, setCount] = useState(0);
 
-  test('renders a title', () => {
-    const { queryByTestId } = render(<App />);
-    const title = queryByTestId('app-title');
-    expect(title).toBeInTheDocument();
-    expect(title.textContent).toBe('My App Component');
-  });
-});
+  const incrementCount = () => setCount(count + 1);
+
+  const decrementCount = () => setCount(count - 1);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={incrementCount}>+</button>
+      <button onClick={decrementCount}>-</button>
+    </div>
+  );
+};
+
+export default App;
+
+// Unit test using React Testing Library
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import App from './_app'
+
+describe('The App component', () => {
+  test('Renders the counter', () => {
+    render(<App />);
+    // Assertions
+    expect(screen.getByRole('heading')).toHaveTextContent('Count: 0')
+  })
+
+  test('Increments the counter', () => {
+    render(<App />);
+    screen.getByRole('button', {name: '+'}).click()
+    
+    // Assertions
+    expect(screen.getByRole('heading')).toHaveTextContent('Count: 1')
+  })
+
+  test('Decrements the counter', () => {
+    render(<App />);
+    screen.getByRole('button', {name: '-'}).click()
+    
+    // Assertions
+    expect(screen.getByRole('heading')).toHaveTextContent('Count: -1')
+  })
+
+})
