@@ -1,85 +1,69 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useContext } from "react";
 
 export const UserContext = createContext();
 
-const initialState = {
-  name: 'John Doe',
-  email: 'john@example.com',
+export const useUser = () => useContext(UserContext);
+
+export const UserProvider = ({ initialState, children }) => {
+  const [user, setUser] = React.useState(initialState);
+
+  const setUserDetails = user => {
+    setUser({
+      ...user
+    });
+  };
+
+  return (
+    <UserContext.Provider value={{ user, setUserDetails }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
-export const userReducer = (state, action) => {
-  switch (action.type) {
-    case 'setName':
-      return { ...state, name: action.name };
-    case 'setEmail':
-      return { ...state, email: action.email }; 
-    default:
-      return state;
-  }
-};
-
-export const UserContextProvider = (props) => {
-  const [user, dispatch] = useReducer(userReducer, initialState);
-  return <UserContext.Provider value={{ user, dispatch }} {...props} />;
-};
-
-// Unit test
+// Test
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { UserContextProvider, UserContext, userReducer } from './users.context';
+import { render, fireEvent, act } from '@testing-library/react';
+import { UserProvider, useUser } from './users.context';
 
-describe('Test user context reducer', () => {
-  it('Should set the name in the state', () => {
-    const action = {
-      type: 'setName',
-      name: 'Jane Doe',
-    };
+const setup = () => {
+  const Ul = () => {
+    const userContext = useUser();
 
-    const result = userReducer(initialState, action);
-
-    expect(result.name).toBe('Jane Doe');
-  });
-
-  it('Should set the email in the state', () => {
-    const action = {
-      type: 'setEmail',
-      email: 'jane@example.com',
-    };
-
-    const result = userReducer(initialState, action);
-
-    expect(result.email).toBe('jane@example.com');
-  });
-});
-
-describe('Test user context provider', () => {
-  it('Should render  its children', () => {
-    render(
-      <UserContextProvider>
-        <div>Test</div>
-      </UserContextProvider>
+    return (
+      <div>
+        <button onClick={() => userContext.setUserDetails({ name: 'Ellis' })}>
+          Set User
+        </button>
+        <span>{userContext.user.name}</span>
+      </div>
     );
+  };
 
-    expect(screen.getByText('Test')).toBeInTheDocument();
-  });
+  const { container } = render(
+    <UserProvider initialState={{ name: 'Sven' }}>
+      <Ul />
+    </UserProvider>
+  );
 
-  it('Should dispatch changes to the context state', () => {
-    const TestChild = () => {
-      const { dispatch } = React.useContext(UserContext);
+  const button = container.querySelector('button');
+  const name = container.querySelector('span');
 
-      return <button onClick={() => dispatch({ type: 'setName', name: 'John Doe' })}>Dispatch</button>;
-    };
+  return {
+    button,
+    name
+  };
+};
 
-    render(
-      <UserContextProvider>
-        <TestChild />
-      </UserContextProvider>
-    );
+describe('User Context', () => {
+  it('should update user name when button is clicked', async () => {
+    const { button, name } = setup();
 
-    const button = screen.getByText('Dispatch');
-    fireEvent.click(button);
+    // Simulate click on button
+    await act(async () => {
+      fireEvent.click(button);
+    });
 
-    const { contacts } = React.useContext(UserContext);
-    expect(contacts.user.name).toBe('John Doe');
+    // Assert user is updated
+    expect(name.textContent).toBe('Ellis');
   });
 });
