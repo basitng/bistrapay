@@ -1,69 +1,55 @@
-import React, { createContext, useContext } from "react";
-
-export const UserContext = createContext();
-
-export const useUser = () => useContext(UserContext);
-
-export const UserProvider = ({ initialState, children }) => {
-  const [user, setUser] = React.useState(initialState);
-
-  const setUserDetails = user => {
-    setUser({
-      ...user
-    });
-  };
-
-  return (
-    <UserContext.Provider value={{ user, setUserDetails }}>
-      {children}
-    </UserContext.Provider>
-  );
-};
-
-// Test
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react';
-import { UserProvider, useUser } from './users.context';
+import { render, cleanup, fireEvent } from '@testing-library/react';
 
-const setup = () => {
-  const Ul = () => {
-    const userContext = useUser();
+import { UsersContext } from './users.context';
 
-    return (
-      <div>
-        <button onClick={() => userContext.setUserDetails({ name: 'Ellis' })}>
-          Set User
-        </button>
-        <span>{userContext.user.name}</span>
-      </div>
+let store;
+
+// Mock this function for testing
+const setUserName = jest.fn();
+const getUserName = jest.fn();
+
+beforeEach(() => {
+  store = {
+    userName: 'Bob',
+    setUserName,
+    getUserName
+  };
+});
+
+afterEach(cleanup);
+
+describe('UsersContext Component', () => {
+  it('renders the UsersContext provider with the store context', () => {
+    const { getByText } = render(
+      <UsersContext.Provider value={store}>
+        <div>Hello Bob!</div>
+      </UsersContext.Provider>
     );
-  };
+    expect(getByText('Hello Bob!')).toBeInTheDocument();
+  });
 
-  const { container } = render(
-    <UserProvider initialState={{ name: 'Sven' }}>
-      <Ul />
-    </UserProvider>
-  );
+  it('calls the setUserName when it is changed', () => {
+    const { getByTestId } = render(
+      <UsersContext.Provider value={store}>
+        <input type="text" id="userNameInput" data-testid="userNameInput" onChange={() => setUserName('Betty')} />
+      </UsersContext.Provider>
+    );
 
-  const button = container.querySelector('button');
-  const name = container.querySelector('span');
+    const input = getByTestId('userNameInput');
 
-  return {
-    button,
-    name
-  };
-};
+    fireEvent.change(input, { target: { value: 'Betty' } });
 
-describe('User Context', () => {
-  it('should update user name when button is clicked', async () => {
-    const { button, name } = setup();
+    expect(setUserName).toHaveBeenCalledWith('Betty');
+  });
 
-    // Simulate click on button
-    await act(async () => {
-      fireEvent.click(button);
-    });
+  it('calls the getUserName function', () => {
+    render(
+      <UsersContext.Provider value={store}>
+        <button onClick={() => getUserName()} />
+      </UsersContext.Provider>
+    );
 
-    // Assert user is updated
-    expect(name.textContent).toBe('Ellis');
+    expect(getUserName).toHaveBeenCalled();
   });
 });
