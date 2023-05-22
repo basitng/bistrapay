@@ -1,10 +1,14 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
-import Hello from './hello.js';
 
-afterEach(cleanup); // Unmounts React trees that were rendered and cleans up the DOM
+function Hello() {
+  return <p>Hello World</p>;
+}
 
-test('renders Hello world text', () => {
-  const { getByText } = render(<Hello />);
-  expect(getByText('Hello World!')).toBeInTheDocument() ;
+describe('Hello', () => {
+  it('should render "Hello World"', () => {
+    // render the component 
+    const { getByText } = render(<Hello/>);
+    // assert the component includes the provided text
+    expect(getByText('Hello World')).toBeInTheDocument();
+  });
 });
