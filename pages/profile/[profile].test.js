@@ -1,21 +1,26 @@
 import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import Profile from './Profile';
 
-function Profile({name, age, gender}) {
-  return (
-    <div>
-      <p>Name: {name}</p>
-      <p>Age: {age}</p>
-      <p>Gender: {gender}</p>
-    </div>
-  );
-}
+describe('Profile component', () => {
+  it('should render the profile name', () => {
+    const { getByText } = render(<Profile name="John Doe" />);
+    const profileName = getByText('John Doe');
+    expect(profileName).toBeInTheDocument();
+  });
 
-describe('Profile Component', () => {
-    it('should render the name, age, and gender', () => {
-      const { getByText } = render(<Profile name="John Doe" age={25} gender="Male" />);
-      
-      expect(getByText('Name: John Doe')).toBeInTheDocument();
-      expect(getByText('Age: 25')).toBeInTheDocument();
-      expect(getByText('Gender: Male')).toBeInTheDocument();
-    });
+  it('should render a button to edit the profile', () => {
+    const { getByTestId } = render(<Profile />);
+    const editButton = getByTestId('edit-button');
+    expect(editButton).toBeInTheDocument();
+    expect(editButton.textContent).toBe('Edit Profile');
+  });
+
+  it('should call the onEdit prop when the edit button is clicked', () => {
+    const onEditMock = jest.fn();
+    const { getByTestId } = render(<Profile onEdit={onEditMock} />);
+    const editButton = getByTestId('edit-button');
+    fireEvent.click(editButton);
+    expect(onEditMock).toHaveBeenCalledTimes(1);
+  });
 });
