@@ -1,7 +1,25 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+    import {render, unmountComponentAtNode} from "react-dom";
+    import {act} from "react-dom/test-utils";
+   
+    let container = null;
+    beforeEach(() => {
+      // setup a DOM element as a render target
+      container = document.createElement("div");
+      document.body.appendChild(container);
+    });
+     
+     
+    afterEach(() => {
+      // cleanup on exiting
+      unmountComponentAtNode(container);
+      container.remove();
+      container = null;
+    });
 
-test('Renders Hello Page', () => {
-  const { asFragment } = render(<h1>Hello</h1>);
-  expect(asFragment()).toMatchSnapshot(); 
-});
+    it("Renders a simple message inside the provided div", () => {
+      act(() => {
+        render(<Hello message="Hello world" />, container);
+      });
+      expect(container.textContent).toBe("Hello world");
+    });
