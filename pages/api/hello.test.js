@@ -1,25 +1,25 @@
 import React from 'react';
-    import {render, unmountComponentAtNode} from "react-dom";
-    import {act} from "react-dom/test-utils";
-   
-    let container = null;
-    beforeEach(() => {
-      // setup a DOM element as a render target
-      container = document.createElement("div");
-      document.body.appendChild(container);
-    });
-     
-     
-    afterEach(() => {
-      // cleanup on exiting
-      unmountComponentAtNode(container);
-      container.remove();
-      container = null;
-    });
 
-    it("Renders a simple message inside the provided div", () => {
-      act(() => {
-        render(<Hello message="Hello world" />, container);
-      });
-      expect(container.textContent).toBe("Hello world");
-    });
+const HelloPage = () => {
+ return( 
+   <div>
+      <h1>Hello World!</h1>
+   </div>
+ );
+}
+
+export default HelloPage;
+
+import React from 'react';
+import {render, screen} from '@testing-library/react';
+import HelloPage from './hello';
+
+describe('HelloPage', () => {
+  test('renders the `Hello World!` heading', () => {
+    render(<HelloPage />);
+
+    const heading = screen.getByText('Hello World!');
+
+    expect(heading).toBeInTheDocument();
+  });
+});
