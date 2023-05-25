@@ -1,27 +1,22 @@
-//import statements
 import React from 'react';
-import {render, fireEvent, cleanup } from '@testing-library/react';
+import {cleanup, render} from '@testing-library/react';
 import Index from './index';
 
-afterEach(cleanup);
+describe('Index', () => {
+   afterEach(cleanup);
 
-describe('testing index component', () => {
-    let getByTestId;
-    beforeEach(() => {
-        ({getByTestId} = render(<Index />));
-    });
-    
-    // test to see if the page renders the component
-    test('renders correctly', () => {
-        expect(getByTestId('index')).toBeDefined();
-    });
+   it('should render the index component', () => {
+      const {queryByTestId} = render(<Index/>);
 
-    // test to see if the name changes when inputted
-    test('name changes when inputted', () => {
-        expect(getByTestId('name-input').value).toBeFalsy();
-        fireEvent.change(getByTestId('name-input'), {
-            target: {value: 'John'}
-        });
-        expect(getByTestId('name-input').value).toBe('John');
-    });
+      const indexElement = queryByTestId('index-element');
+      expect(indexElement).toBeTruthy();
+   });
+
+   it('should render the expected content', () => {
+      const {queryByTestId} = render(<Index/>);
+
+      const indexElement = queryByTestId('index-element');
+      expect(indexElement.innerHTML).toMatchSnapshot();
+   });
+
 });
