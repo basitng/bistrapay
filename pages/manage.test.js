@@ -1,26 +1,31 @@
 import React from 'react';
-import Manage from './manage';
+import { render, fireEvent, cleanup } from '@testing-library/react';
+import Manage from './Manage';
 
-let component;
+describe('Test Manage Page', () => {
+  afterEach(cleanup);
 
-beforeEach(() => {
-  component = render(<Manage />);
-});
-
-describe('Manage Component', () => {
-  test('should render the component without errors', () => {
-    expect(component).toBeTruthy();
+  it('should render the manage page', () => {
+    const { getByTestId } = render(<Manage />);
+    expect(getByTestId('manage-page-container')).toBeInTheDocument();
   });
 
-  test('should check if the manage component has a form element', () => {
-    const manageForm = component.container.querySelector('form');
-    expect(manageForm).toBeTruthy();
+  it('should feed the state on input change', () => {
+    const { getByTestId, getByLabelText } = render(<Manage />);
+    fireEvent.change(getByLabelText('Name'), { target: { value: 'Today' } });
+    expect(getByTestId('manage-page-container').state.name).toBe('Today');
   });
 
-  test('should simulate a submit event on click of the submit button', () => {
-    const buttonElement = component.getByText('Submit');
-    fireEvent.click(buttonElement);
-    expect(buttonElement).toBeTruthy();
+  it('should add a new item when the add item button is clicked', () => {
+    const { getByTestId, getByText } = render(<Manage />);
+    fireEvent.click(getByText('Add new item'));
+    expect(getByTestId('manage-page-container').state.items.length).toBe(1);
   });
- 
+  
+  it('should delete an item when the delete item button is clicked', () => {
+    const { getByTestId, getByText } = render(<Manage />);
+    fireEvent.click(getByText('Add new item'));
+    fireEvent.click(getByText('Delete item'));
+    expect(getByTestId('manage-page-container').state.items.length).toBe(0);
+  });
 });
