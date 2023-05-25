@@ -1,10 +1,17 @@
-import React from 'react'; 
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
 
-describe('pages/index.js', () => {
-  it('displays the welcome message', () => {  
-    render(<div>Welcome to my web page</div>);
-    const welcomeMessage = screen.getByText('Welcome to my web page');
-    expect(welcomeMessage).toBeInTheDocument();
+describe('Button component test', () => {
+  it('should render text on click of button', () => {
+    // Arrange
+    const buttonText = 'Click Me';
+    const { getByText } = render(<button>{buttonText}</button>);
+    const expectedText = 'Button has been clicked';
+
+    // Act
+    fireEvent.click(getByText(buttonText));
+
+    // Assert
+    expect(getByText(expectedText)).toBeInTheDocument();
   });
 });
