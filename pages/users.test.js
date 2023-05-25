@@ -1,14 +1,13 @@
-import React from 'react';
+// import React from 'react'
 
-const User = ({name, age}) => {
-  return <div> {name} is {age} </div>;
-};
+import { render } from '@testing-library/react';
 
-describe('User Component', () => {
-  it('should render user name and age', () => {
-    const userData = {name: 'John', age: 25};
-    const { getByText } = render(<User {...userData} />);
-
-    expect(getByText('John is 25')).toBeInTheDocument();
+describe('Users', () => {
+  it('should render the page with common elements', () => {
+    const { getByText } = render(<Users />);
+    expect(getByText('Users List')).toBeInTheDocument();
+    expect(getByText('Name')).toBeInTheDocument();
+    expect(getByText('Age')).toBeInTheDocument();
+    expect(getByText('Location')).toBeInTheDocument();
   });
 });
