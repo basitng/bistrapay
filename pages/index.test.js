@@ -1,17 +1,20 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-
-describe('Button component test', () => {
-  it('should render text on click of button', () => {
-    // Arrange
-    const buttonText = 'Click Me';
-    const { getByText } = render(<button>{buttonText}</button>);
-    const expectedText = 'Button has been clicked';
-
-    // Act
-    fireEvent.click(getByText(buttonText));
-
-    // Assert
-    expect(getByText(expectedText)).toBeInTheDocument();
-  });
-});
+// None
+    
+        import React from 'react';
+        import { mount } from 'enzyme';
+        import App from '../App'
+    
+        describe('App', () => {
+            let wrapper;
+            beforeEach(() => {
+                wrapper = mount(<App />)
+            })
+    
+            it('should render without errors', () => {
+                expect(wrapper.find('.App')).toHaveLength(1);
+            });
+    
+            it('should render the title', () => {
+                expect(wrapper.find('h1').text()).toBe('Welcome to My App');
+            });
+        });
