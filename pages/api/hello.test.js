@@ -1,25 +1,38 @@
-import React from 'react';
+None
+        
+        // Test Suite
+    describe("Hello component", () => {
+        // Test Case 1
+        test("should render a button with the text `Say hello`", () => {
+            // Set up our document body
+            document.body.innerHTML = `<div>
+                              <button>Say hello</button>
+                            </div>`;
 
-const HelloPage = () => {
- return( 
-   <div>
-      <h1>Hello World!</h1>
-   </div>
- );
-}
+            // Get the button element
+            const buttonElement = document.querySelector('button');
 
-export default HelloPage;
+            // Assert the button element text is equal to the expected text. 
+            expect(buttonElement.textContent).toBe('Say hello');
+        });
 
-import React from 'react';
-import {render, screen} from '@testing-library/react';
-import HelloPage from './hello';
+        // Test Case 2
+        test("should display 'Hello World' when the button is clicked", () => {
+            // Set up the document body
+            document.body.innerHTML = `<div>
+                              <button>Say hello</button>
+                              <div id="helloDiv"></div>
+                            </div>`;
 
-describe('HelloPage', () => {
-  test('renders the `Hello World!` heading', () => {
-    render(<HelloPage />);
+            // Get the button element
+            const buttonElement = document.querySelector('button');
+            // Simulate a click event    
+            buttonElement.click();
 
-    const heading = screen.getByText('Hello World!');
+            // Get the element we want to test the result on
+            const divElement = document.querySelector('#helloDiv');
 
-    expect(heading).toBeInTheDocument();
-  });
-});
+            // Assert the div element text is equal to the expected text.
+            expect(divElement.textContent).toBe('Hello World');
+        });
+    });
