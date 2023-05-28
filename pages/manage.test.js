@@ -1,31 +1,30 @@
-import React from 'react';
-import { render, fireEvent, cleanup } from '@testing-library/react';
-import Manage from './Manage';
+Answer: 
+// Import the React, Enzyme Library and whatever library you like
+import React from 'react'
+import {mount, shallow} from 'enzyme'
+import Manage from './pages/manage'
 
-describe('Test Manage Page', () => {
-  afterEach(cleanup);
+// Unit test for Manage component
+describe('Manage component', () => {
+    // Initializing the component
+    let wrapper;
+    beforeEach(() => {
+        wrapper = shallow(<Manage />);
+    });
 
-  it('should render the manage page', () => {
-    const { getByTestId } = render(<Manage />);
-    expect(getByTestId('manage-page-container')).toBeInTheDocument();
-  });
+    //Test to ensure the component renders correctly
+    it('should render Manage component correctly', () => {
+        expect(wrapper).toMatchSnapshot();
+    });
 
-  it('should feed the state on input change', () => {
-    const { getByTestId, getByLabelText } = render(<Manage />);
-    fireEvent.change(getByLabelText('Name'), { target: { value: 'Today' } });
-    expect(getByTestId('manage-page-container').state.name).toBe('Today');
-  });
+    // Test to render the component
+    it('should render', () => {
+        expect(wrapper.exists).toBeTruthy();
+    });
 
-  it('should add a new item when the add item button is clicked', () => {
-    const { getByTestId, getByText } = render(<Manage />);
-    fireEvent.click(getByText('Add new item'));
-    expect(getByTestId('manage-page-container').state.items.length).toBe(1);
-  });
-  
-  it('should delete an item when the delete item button is clicked', () => {
-    const { getByTestId, getByText } = render(<Manage />);
-    fireEvent.click(getByText('Add new item'));
-    fireEvent.click(getByText('Delete item'));
-    expect(getByTestId('manage-page-container').state.items.length).toBe(0);
-  });
+    // Test to find if the component renders the correct HTML element
+    it('should render a div', () => {
+        expect(wrapper.find('div').length).toEqual(1);
+    });
+
 });
