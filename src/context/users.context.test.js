@@ -1,24 +1,94 @@
-import React from 'react';
-import { UserContext } from './users.context';
+import React, { createContext } from 'react';
+        import { useState } from "react";
+ 
+        export const UserContext = createContext();
+ 
+        export const UserProvider = ({ children }) => {
+            const [users, setUsers] = useState([
+                {
+                    id: 1,
+                    username: 'alice',
+                    age: 18
+                },
+                {
+                    id: 2,
+                    username: 'bob',
+                    age: 23
+                }
+            ]);
+            const [pageState, setPageState] = useState('list');
+            const [selectedUser, setSelectedUser] = useState('');
+            return (
+                <UserContext.Provider
+                    value={{
+                        users,
+                        pageState,
+                        setPageState,
+                        selectedUser,
+                        setSelectedUser
+                    }}
+                >
+                    {children}
+                </UserContext.Provider>
+            )
+        }
 
-describe('UserContext', () => {
-  it('should render without crashing', () => {
-    const userContext = new UserContext();
-    expect(userContext).not.toBeNull();
-  });
+import { UserContext, UserProvider } from './users.context';
+import { render, fireEvent } from '@testing-library/react';
 
-  it('should have a method to add a user to the context', () => {
-    const userContext = new UserContext();
-    expect(userContext.addUser).toBeDefined();
-    expect(typeof userContext.addUser).toBe('function');
+describe('Users Context', () => {
+    test('Check if users in context is updated', () => {
+        // Render the Context Provider
+        const { getByTestId } = render(
+            <UserProvider>
+                <UserContext.Consumer>
+                    {(context) => (
+                        <button data-testid='user-button' onClick={() => context.setUsers([...context.users, {id: 3, username: 'caroline', age: 30}])}/>
+                    )}
+                </UserContext.Consumer>
+            </UserProvider>);
 
-    const user = {
-      id: 1,
-      name: 'John Smith',
-    };
-    userContext.addUser(user);
+        const button = getByTestId('user-button');
+        fireEvent.click(button);
 
-    // Check the value has changed
-    expect(userContext.users).toContain(user);
-  });
+        expect(button).toBeInTheDocument();
+        expect(context.users).toHaveLength(3);
+    });
+
+    test('Check if selectedUser in context is updated', () => {
+        // Render the Context Provider
+        const { getByTestId } = render(
+            <UserProvider>
+                <UserContext.Consumer>
+                    {(context) => (
+                        <button data-testid='selected-user-button' onClick={() => context.setSelectedUser('caroline')}/>
+                    )}
+                </UserContext.Consumer>
+            </UserProvider>);
+
+        const button = getByTestId('selected-user-button');
+        fireEvent.click(button);
+
+        expect(button).toBeInTheDocument();
+        expect(context.selectedUser).toBe("caroline");
+    });
+
+    test('Check if pageState in context is updated', () => {
+        // Render the Context Provider
+        const { getByTestId } = render(
+            <UserProvider>
+                <UserContext.Consumer>
+                    {(context) => (
+                        <button data-testid='page-state-button' onClick={() => context.setPageState('detail')}/>
+                    )}
+                </UserContext.Consumer>
+            </UserProvider>);
+
+        const button = getByTestId('page-state-button');
+        fireEvent.click(button);
+
+        expect(button).toBeInTheDocument();
+        expect(context.pageState).toBe("detail");
+    });
+
 });
