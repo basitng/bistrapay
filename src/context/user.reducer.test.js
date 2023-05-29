@@ -1,56 +1,22 @@
-import { userReducer, initialState } from './user.reducer';
-import {
-    updateUsername,
-    updateEmail,
-    updatePassword
-} from './user.actions';
+import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import { mount, shallow } from 'enzyme'
+import { userReducer } from './user.reducer'
 
-// Set up test library or framework
-describe('userReducer', () => {
-    it('should return initial state', () => {
-        expect(userReducer(undefined, {}))
-            .toEqual(initialState);
-    });
+describe('userReducer', () => { 
+  let store;
 
-    it('should handle updateUsername action', () => {
-        const action = {
-            type: updateUsername,
-            payload: 'John Smith'
-        };
-        const expectedState = {
-            ...initialState,
-            username: 'John Smith'
-        };
+  beforeEach(() => {
+    store = createStore(userReducer)
+  })
 
-        expect(userReducer(undefined, action))
-            .toEqual(expectedState);
-    });
+  test('Update the user name', () => {
+    expect(userReducer({name:'mark'}, {type:'UPDATE_USER_NAME', name:'mark jones'})).toEqual({name:'mark jones'})
+  }) 
 
-    it('should handle updateEmail action', () => {
-        const action = {
-            type: updateEmail,
-            payload: 'john.smith@example.com'
-        };
-        const expectedState = {
-            ...initialState,
-            email: 'john.smith@example.com'
-        };
+  test('Delete user name', () => {
+    expect(userReducer({name:'mark'}, {type:'DELETE_USER_NAME'})).toEqual({name:''})
+  }) 
 
-        expect(userReducer(undefined, action))
-            .toEqual(expectedState);
-    });
-
-    it('should handle updatePassword action', () => {
-        const action = {
-            type: updatePassword,
-            payload: '123456'
-        };
-        const expectedState = {
-            ...initialState,
-            password: '123456'
-        };
-
-        expect(userReducer(undefined, action))
-            .toEqual(expectedState);
-    });
-});
+})
