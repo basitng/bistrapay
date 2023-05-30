@@ -1,35 +1,58 @@
-import { userReducer } from '../reducers/user.reducer';
+import React from 'react';
+        import { shallow } from 'enzyme';
+        import { userReducer } from './user.reducer';
+        
+        describe('userReducer', () => {
+            test('should set an initial state', () => {
+            const expectedState = {
+                username: null,
+                role: null
+            };
+            expect(userReducer(undefined, {})).toEqual(expectedState);
+            });
 
-    describe('userReducer test', () => {
-        test('returns the initial state', () => {
-            expect(userReducer(undefined, {})).toEqual({userList:[]});
+            test('should return the current state if no valid actions have been made', () => {
+                // Section for writing the unit test
+            });
+
+            test('should set username', () => {
+                // Section for writing the unit test
+            });
+
+            test('should set role', () => {
+                // Section for writing the unit test
+            });
         });
 
-        test('adds new users to userList state', () => {
-            const user = {
-                id: '123',
-                name: 'John Doe'
-            };
-            const expectedResult = {
-                userList: [user]
-            };
+// Test for returning the current state if no valid  actions have been made
+const state = {
+    username: "john",
+    role: "admin"
+};
 
-            expect(userReducer(undefined, {type: ADD_USER, user})).toEqual(expectedResult);
-        });
+expect(userReducer(state, { type: null })).toEqual(state);
 
-        test('Removing users from userList state', () => {
-            const user = {
-                id: '123',
-                name: 'John Doe'
-            };
-            const initialState = {
-                userList: [user]
-            };
+// Test for setting username
+const action = {
+    type: 'SET_USERNAME',
+    username: 'mark'
+};
+const expectedState = {
+    username: 'mark',
+    role: null
+};
 
-            const expectedResult = {
-                userList: []
-            };
+expect(userReducer(state, action)).toEqual(expectedState);
 
-            expect(userReducer(initialState, {type: REMOVE_USER, user})).toEqual(expectedResult);
-        });
-    });
+// Test for setting role
+const action2 = {
+    type: 'SET_ROLE',
+    role: 'admin'
+};
+
+const expectedState2 = {
+    username: "john",
+    role: "admin"
+};
+
+expect(userReducer(state, action2)).toEqual(expectedState2);
