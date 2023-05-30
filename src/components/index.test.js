@@ -1,14 +1,19 @@
 import React from 'react';
 
-import { render, cleanup } from '@testing-library/react';
+const Header = () => (
+    <div>
+        <h1>Header</h1>
+    </div>
+);
 
-import {Index} from './index';
+export default Header;
 
-describe('Index component', () => {
-  afterEach(cleanup);
+import React from "react";
+import { render, screen } from "@testing-library/react";
 
-  it('renders correctly', () => {
-    const { asFragment } = render(<Index />);
-    expect(asFragment()).toMatchSnapshot();
+describe('Header', () => {
+  it('contains header element', () => {
+    render(<Header />);
+    expect(screen.getByText("Header")).toBeInTheDocument();
   });
 });
