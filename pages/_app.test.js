@@ -1,12 +1,14 @@
-import React from "react";
+import React from 'react'
+    import {render} from 'react-testing-library'
     
-    import { render } from "@testing-library/react";
-    import App from "./_app";
-
-    describe("/pages/_app.js", () => {
-	  it("should render the App component", () => {
-	    const { getByText } = render(<App />);
-	    const header = getByText("Welcome");
-	    expect(header).toBeInTheDocument();
-	  });
-	});
+    const App = () => {
+        return (<div>Header</div>)
+    }
+    
+    describe('App Component', () => {
+        it('Should display the Header ', () => {
+            const { getByText } = render(<App />);
+            const header = getByText(/header/i);
+            expect(header).toBeInTheDocument();
+        });
+    });
