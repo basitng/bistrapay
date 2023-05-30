@@ -1,26 +1,44 @@
 import React from 'react';
-    import {UsersList} from './UsersList';
+ 
+class Users extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users : []
+    };
+  }
+  
+  componentDidMount() {
+    fetch('/api/users')
+        .then(res => res.json())
+        .then(users => this.setState({users}))
+  }
 
-    describe('UsersList component', () => {
-        let wrapper;
-        beforeEach(() => {
-            wrapper = shallow(<UsersList />)
-        }); 
-        
-        test('should render the title', () => {
-            const title = wrapper.find('h2');
-            expect(title.text()).toBe('List of All Users:');
-        }); 
-        
-        test('should render a list of users', () => {
-            expect(wrapper.find('ul').exists).toBe(true);
-            expect(wrapper.find('li').length).toBe(10);
-        });
-        
-        test('it should contain a name for each user', () => {
-            // check every li item
-            wrapper.find('li').forEach(node => {
-                expect(node.text.includes('Name:')).toBeTruthy();
-            });
-        }); 
-    });
+  render() {
+    return (
+      <div>
+        <h2>Users</h2>
+        {this.state.users.map(user => 
+          <div key={user.id}>{user.name}</div>
+        )}
+      </div>
+    );
+  }
+}
+
+test('shows a list of users when componentDidMount is called', () => {
+  // Mock the API response
+  fetch.mockResponse(JSON.stringify([{id: 1, name: 'John'}, {id: 2, name: 'Jack'}]));
+ 
+  // Render our component
+  const { getByText } = render(<Users />);
+ 
+  // Call the componentDidMount lifecycle method
+  act(() => {
+    fireEvent.load(window);
+  });
+ 
+  // Assert the users are listed
+  expect(getByText('John')).toBeInTheDocument();
+  expect(getByText('Jack')).toBeInTheDocument();
+});
