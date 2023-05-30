@@ -1,40 +1,24 @@
 import React from 'react';
-        import { render, fireEvent } from '@testing-library/react';
-
-        const App = () => {
-            const [text, setText] = React.useState('');
-            const handleChange = (e) => {
-                setText(e.currentTarget.value);
-            };
-
-            return (
-                <div>
-                    <input type="text" value={text} onChange={handleChange} />
-                    <p>{`Text: ${text}`}</p>
-                </div>
-            );
-        };
-
-
-        test('App component should render an input field', () => {
-            const { queryByTestId } = render(<App />);
-            const inputField = queryByTestId('input-field');
-            expect(inputField).toBeInTheDocument();
+     import { act } from 'react-dom/test-utils';
+     import { render, fireEvent } from '@testing-library/react';
+     import App from '../components/App';
+     
+     describe('App component', () => {
+        it('Should display "Welcome to App" on screen', () => {
+            const { getByText } = render(<App />);
+            let welcomeText = getByText('Welcome to App');
+            expect(welcomeText).toBeInTheDocument();
         });
-
-        test('App component should update the value of the input field', () => {
-            const { queryByTestId } = render(<App />);
-            const inputField = queryByTestId('input-field');
-            expect(inputField.value).toBe('');
-            fireEvent.change(inputField, { target: { value: 'New Value' } });
-            expect(inputField.value).toBe('New Value');
+        
+        it('Should update title when new value is entered', () => {
+            const { getByText, getByPlaceholderText } = render(<App />);
+            const titleInput = getByPlaceholderText('Enter Title');
+    
+            act(() => {
+                fireEvent.change(titleInput, { target: { value: 'New App Title' } });
+            });
+            
+            let newTitle = getByText('New App Title');
+            expect(newTitle).toBeInTheDocument();
         });
-
-        test('App component should update the text when the input value is changed', () => {
-            const { queryByTestId } = render(<App />);
-            const textField = queryByTestId('text-field');
-            expect(textField.textContent).toBe('Text: ');
-            const inputField = queryByTestId('input-field');
-            fireEvent.change(inputField, { target: { value: 'New Value' } });
-            expect(textField.textContent).toBe('Text: New Value');
-        });
+    });
