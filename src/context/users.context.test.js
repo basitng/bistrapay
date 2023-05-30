@@ -1,11 +1,21 @@
 import React from 'react';
-        import { mount, shallow } from 'enzyme';
-        import { UsersContext } from '../context/users.context';
-        
-        describe('Component rendering', () => {
-
-           it('should render correctly', () => {
-              const wrapper = shallow(<UsersContext.Provider>Test</UsersContext.Provider>);
-              expect(wrapper).toMatchSnapshot();
-           });
+    import {mount} from 'enzyme';
+    import UsersContext from './UsersContext';
+    
+    describe('UsersContext', function() {
+        it('should receive and set the user in the context', function() {
+            const FamilyName = 'Doe';
+            const user = {
+                firstName: 'John',
+                lastName:  FamilyName
+            };
+            const wrapper = mount(
+                <UsersContext.Provider value={user}>
+                    <div>Content</div>
+                </UsersContext.Provider>
+            );
+            const receivedUser = wrapper.find(UsersContext.Consumer).props().value;
+            
+            expect(receivedUser).toEqual(user);
         });
+    });
