@@ -1,22 +1,28 @@
+import React from "react";
+    import ReactDOM from "react-dom";
+    import { WelcomeMessage } from "./WelcomeMessage.js";
+
+    function App() {
+      return (
+        <div>
+          <WelcomeMessage />
+        </div>
+      );
+    }
+
+    const rootElement = document.getElementById("root");
+    ReactDOM.render(<App />, rootElement);
+
+------------------------------------------------
+
 import React from 'react';
+import { render } from '@testing-library/react';
+import WelcomeMessage from './WelcomeMessage.js';
 
-class TestComponent extends React.Component {
-  state = {
-    message: 'Hello World'
-  }
-  
-  render() {
-    return (
-      <div>
-        {this.state.message} 
-      </div>
-    )
-  }
-}
-
-describe("TestComponent", () => {
-  it("should render the message from state", () => {
-    const { getByText } = render(<TestComponent />);
-    expect(getByText('Hello World')).toBeInTheDocument();
-  }); 
+describe('WelcomeMessage', () => {
+    it('should render welcome message', () => {
+        const { getByText } = render(<WelcomeMessage />);
+    
+        expect(getByText("Welcome!")).toBeInTheDocument();
+    });
 });
