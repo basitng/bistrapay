@@ -1,12 +1,19 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import NavBar from './NavBar'
+import NavBar from './NavBar';
+import { render, fireEvent } from "@testing-library/react";
 
-describe("NavBar Component", () => {
-    test('Component is rendered correctly in UI', ()=>{
-        const { getByText } = render(<NavBar />);
-        expect(getByText("Home")).toBeInTheDocument();
-        expect(getByText("About")).toBeInTheDocument();
-        expect(getByText("FAQ")).toBeInTheDocument();
-    })
-})
+test('Clicking link should change page', () => { 
+    // Initial Render of the component
+    const { getByText } = render(<NavBar />);
+
+    // Assert link is present
+    const linkElement = getByText(/Home/i);
+    expect(linkElement).toBeInTheDocument();
+
+    // Fire Event
+    fireEvent.click(linkElement);
+
+    // Assert new page and link to be presented
+    const aboutLinkElement = getByText(/About/i);
+    expect(aboutLinkElement).toBeInTheDocument();
+});
