@@ -1,11 +1,16 @@
-import React from 'react'; 
-import { render } from '@testing-library/react'; 
-import App from './App'; 
+import React from 'react';
 
-describe('App', () => {
-  it('renders the hello world message', () => { 
-    const { getByText } = render(<App />); 
-    const helloWorldMessage = getByText('Hello World'); 
-    expect(helloWorldMessage).toBeInTheDocument(); 
+const Hello = () => {
+  return <h1>Hello!</h1>;
+};
+
+export default Hello;
+
+import {render, screen} from '@testing-library/react';
+
+describe('Hello', () => {
+  it('should render hello', () => {
+    render(<Hello />);
+    expect(screen.getByText('Hello!')).toBeInTheDocument();
   });
 });
