@@ -1,17 +1,19 @@
-import React from 'react';
-        import { render } from 'react-testing-library';
-    
-        function App(){
-           return (
-    	      <div>
-                <h1 className="Heading">Welcome to our App</h1>
-    	     </div> 
-           )
-        }
-    
-        //Writing a unit test using react-testing-library
-        test('renders App component', () => {
-          const { getByText } = render(<App />);
-          const headingElement = getByText(/Welcome to our App/i);
-          expect(headingElement).toBeInTheDocument();  
-        });
+import React from "react";
+
+const App = () => {
+  return (
+    <>
+      <h1>App Component</h1>
+    </>
+  );
+};
+
+export default App;
+
+// Test using the React Testing Library
+import { render } from '@testing-library/react';
+
+test('App render correctly', () => {
+    const { getByText } = render(<App />);
+    expect(getByText('App Component')).toBeInTheDocument();
+});
