@@ -1,26 +1,22 @@
-import React from 'react';
-import Button from './Button';
-
-const IndexPage = () => {
-    return (
-        <div>
-            <h1>Index Page</h1>
-            <Button label="click me" />
-        </div>
-    );
-}
-
-export default IndexPage;
-
-//Unit Test
-import React from 'react';
-import { render, cleanup } from '@testing-library/react';
-import IndexPage from './index';
-
-afterEach(cleanup);
-
-test('it should render the <IndexPage /> correctly', () => {
-    const { getByText } = render(<IndexPage />);
-    expect(getByText('IndexPage')).toBeInTheDocument();
-    expect(getByText('click me')).toBeInTheDocument();
-});
+import React from "react";
+    import { render } from "react-testing-library";
+    import MyComponent from "./MyComponent";
+    
+    describe("MyComponent", () => {
+      // Write your test cases here
+        test('MyComponent should render correct content', () => {
+           const { getByText } = render(<MyComponent />);
+           expect(getByText('MyComponent Text')).toBeInTheDocument();
+        });
+        
+        test('MyComponent should render a button', () => {
+           const { getByText } = render(<MyComponent />);
+           expect(getByText('My Button')).toBeInTheDocument();
+        });
+        
+        test('Button should be disabled on initial load', () => {
+           const { getByText } = render(<MyComponent />);
+           const button = getByText('My Button');
+           expect(button).toBeDisabled();
+        });
+    });
