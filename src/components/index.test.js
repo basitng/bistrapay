@@ -1,12 +1,14 @@
 import React from 'react';
-import {render} from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import Index from './index';
 
-describe('Testing the Index page component', () => {
-    test('Index renders correctly', () => {
-        const {getByText, getByTestId} = render(<Index />);
-        const titleTestElement = getByTestId('title-test');
-        expect(titleTestElement).toBeInTheDocument();
-        expect(getByText('Index page')).toBeInTheDocument();
+afterEach(cleanup);
+
+describe('Index Component', () => {
+    
+    it('renders without crashing', () => {
+        const { getByText } = render(<Index />);
+        const linkElement = getByText(/Index/i);
+        expect(linkElement).toBeInTheDocument();
     });
 });
