@@ -1,37 +1,51 @@
-// Unit test written with react-testing-library
-import { render, fireEvent,  waitForElement } from '@testing-library/react'
-import userReducer from '../src/context/user.reducer';
+import React from 'react';
+import { render, cleanup, fireEvent, waitForElement } from 'react-testing-library';
+import { UserReducer } from './user.reducer';
 
-describe('Testing user.reducer', () => {
-    
-    let initialState 
-    beforeEach(() => {
-      initialState = {
-        data: {},
-        isLoading: false,
-        hasError: false
-      }
-    })
-    
-    // Test for FETCH_STARTED
-    test('should dispatch FETCH_STARTED', () => {
-        const newState = userReducer(initialState, {type: 'FETCH_STARTED'})
-        expect(newState.isLoading).toBe(true)
-        expect(newState.hasError).toBe(false)
-    })
-    
-    // Test for FETCH_SUCCESS
-    test('should dispatch FETCH_SUCCESS', () => {
-        const data = {test_data: 123}
-        const newState = userReducer(initialState, {type: 'FETCH_SUCCESS', payload: data})
-        expect(newState.data).toBe(data)
-        expect(newState.isLoading).toBe(false)
-    })
-    
-    // Test for FETCH_ERROR
-    test('should dispatch FETCH_ERROR', () => {
-        const newState = userReducer(initialState, {type: 'FETCH_ERROR'})
-        expect(newState.isLoading).toBe(false)
-        expect(newState.hasError).toBe(true)
-    })
-})
+describe('UserReducer', () => {
+    afterEach(cleanup);
+
+    const initialState = {
+        userName: '',
+        userId: '',
+        isLoggedIn: false,
+    };
+
+    it('should return the initial state when no action is provided', () => {
+        const newState = UserReducer(undefined, {});
+        expect(newState).toEqual(initialState);
+    });
+
+    it('should set username when action type is SET_USERNAME', () => {
+        const testUserName = 'TestUser';
+        const action = {
+            type: 'SET_USERNAME',
+            userName: testUserName,
+        };
+        const resultState = { ...initialState, userName: testUserName };
+        const newState = UserReducer(undefined, action);
+        expect(newState).toEqual(resultState);
+    });
+
+    it('should set userId when action type is SET_USER_ID', () => {
+        const testUserId = '123';
+        const action = {
+            type: 'SET_USER_ID',
+            userId: testUserId,
+        };
+        const resultState = { ...initialState, userId: testUserId };
+        const newState = UserReducer(undefined, action);
+        expect(newState).toEqual(resultState);
+    });
+
+    it('should set isLoggedIn when action type is SET_IS_LOGGED_IN', () => {
+        const testIsLoggedIn = true;
+        const action = {
+            type: 'SET_IS_LOGGED_IN',
+            isLoggedIn: testIsLoggedIn,
+        };
+        const resultState = { ...initialState, isLoggedIn: testIsLoggedIn };
+        const newState = UserReducer(undefined, action);
+        expect(newState).toEqual(resultState);
+    });
+});
