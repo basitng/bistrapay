@@ -1,35 +1,41 @@
 import React from 'react';
-import { reducer, initialState } from "../context/user.reducer";
-import { LOGIN_SUCCESS, LOGOUT } from '../constants';
+import { render, fireEvent, cleanup } from '@testing-library/react';
+import userReducer from './user.reducer';
 
-describe('user reducer', () => {
-    it('should set loggedin to true when LOGIN_SUCCESS is called', () => {
-        const action = {
-            type: LOGIN_SUCCESS
-        }
+// Your Code - Unit Test
+// Using react-testing-library
 
-        const expectedState = {
-            ...initialState,
-            loggedIn: true
-        }
+describe("User Reducer Unit Test", () => {
+  let initialState
+  beforeEach(() => {
+    initialState={
+      userInfo: null,
+      loading: false
+    };
+  });
 
-        expect(reducer(initialState, action)).toEqual(expectedState);
-    });
+it("Should return initial state", () => {
+  const newState = userReducer(initialState, {});
+  expect(newState).toEqual(initialState);
+})
 
-    it('should set loggedin to false when LOGOUT is called', () => {
-        state = {
-            ... initialState,
-            loggedIn: true
-        }
-        const action = {
-            type: LOGOUT
-        }
+it("Should return new state if receiving type", () => {
+  const newState = userReducer(initialState, {
+    type: "USER_LOADING",
+    payload: true
+  });
+  expect(newState).toEqual({userInfo: null, loading: true});
+})
 
-        const expectedState = {
-            ...state,
-            loggedIn: false
-        }
-
-        expect(reducer(state, action)).toEqual(expectedState);
-    });
+it("Should return new state if receiving type", () => {
+  const payload = {
+    id: 1,
+    name: "John Doe"
+  }
+  const newState = userReducer(initialState, {
+    type: "USER_INFO",
+    payload
+  });
+  expect(newState).toEqual({userInfo: payload, loading: false});
+})
 });
