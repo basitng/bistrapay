@@ -1,27 +1,72 @@
-import React from 'react';
-    import { render, fireEvent } from '@testing-library/react';
-    import ManagePage from './ManagePage';
+import React from "react";
+    import { Manage } from "./manage";
     
-    describe('Manage Page', () => {
-      it('shows the page correctly', () => {
-        const { container } = render(<ManagePage />);
-        expect(container.innerHTML).toMatch('<h1>Manage Page</h1>');
-        expect(container.querySelector('button')).toHaveTextContent('Create');
+    import { render, fireEvent } from "@testing-library/react";
+    
+    describe("Manage", () => {
+      let container;
+    
+      beforeEach(() => {
+        container = render(<Manage />);
       });
     
-      it('form fields are working correctly', () => {
-        const { getByLabelText} = render(<ManagePage />);
-        const jobTitleInput = getByLabelText('Job Title');
-        fireEvent.change(jobTitleInput, { target: { value: 'Software Engineer' } });
-        expect(jobTitleInput.value).toBe('Software Engineer');
+      afterEach(() => {
+        container.unmount();
       });
     
-      it('creates successfully', () => {
-        const { getByText, getByLabelText } = render(<ManagePage />);
-        const jobTitleInput = getByLabelText('Job Title');
-        fireEvent.change(jobTitleInput, { target: { value: 'Software Engineer' } });
-        const createBtn = getByText('Create');
-        fireEvent.click(createBtn);
-        expect(getByText('Successfully created a job!')).toBeInTheDocument();
+      it("should render a title", () => {
+        const titleElement = container.getByText("Manage");
+        expect(titleElement).toBeInTheDocument();
+      });
+    
+      it("should render six buttons", () => {
+        const inputButtons = container.queryAllByRole("button");
+        expect(inputButtons).toHaveLength(6);
+    
+        expect(inputButtons[0]).toHaveTextContent("Add");
+        expect(inputButtons[1]).toHaveTextContent("Subtract");
+        expect(inputButtons[2]).toHaveTextContent("Multiply");
+        expect(inputButtons[3]).toHaveTextContent("Divide");
+        expect(inputButtons[4]).toHaveTextContent("Reset");
+        expect(inputButtons[5]).toHaveTextContent("Randomize");
+      });
+    
+      it("should reset the total when the Reset button is clicked", () => {
+        container.getByText("Reset").click();
+        const totalElement = container.getByTestId("total");
+        expect(totalElement).toHaveTextContent("Total: 0");
+      });
+    
+      it("should update the total when the Add button is clicked", () => {
+        container.getByText("Add").click();
+        const totalElement = container.getByTestId("total");
+        expect(totalElement).toHaveTextContent("Total: 1");
+      });
+    
+      it("should update the total when the Subtract button is clicked", () => {
+        container.getByText("Subtract").click();
+        const totalElement = container.getByTestId("total");
+        expect(totalElement).toHaveTextContent("Total: -1");
+      });
+    
+      it("should update the total when the Multiply button is clicked", () => {
+        container.getByText("Multiply").click();
+        const totalElement = container.getByTestId("total");
+        expect(totalElement).toHaveTextContent("Total: 0");
+      });
+    
+      it("should update the total when the Divide button is clicked", () => {
+        container.getByText("Divide").click();
+        const totalElement = container.getByTestId("total");
+        expect(totalElement).toHaveTextContent("Total: 0");
+      });
+    
+      it("should update the total with a random number when the Randomize button is clicked", () => {
+        const initialTotal = container.getByTestId("total");
+        expect(initialTotal).toHaveTextContent("Total: 0");
+    
+        container.getByText("Randomize").click();
+        const finalTotal = container.getByTestId("total");
+        expect(finalTotal).not.toEqual(initialTotal);
       });
     });
