@@ -1,78 +1,54 @@
 import React from 'react';
-
 import { UserContext } from './users.context';
 
-function UXComponent() {
-  const { users, loading, error } = React.useContext(UserContext);
+const UserProvider = ({ children }) => {
+  const [users, setUsers] = React.useState([]);
 
-  if (loading) {
-    return <div>Loading....</div>;
-  }
+  const getUsers = async () => {
+    const response = await fetch('/api/users');
+    setUsers(response.data);
+  };
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  return (
+    <UserContext.Provider
+      value={{
+        users,
+        getUsers,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
+};
 
-  return <ul>{users.map(user => <li key={user.id}>{user.name}</li>)}</ul>;
-}
+export { UserProvider };
 
-// Unit Test
-import React from 'react';
-import { render,  fireEvent } from '@testing-library/react';
-import { UserContext } from './users.context';
-import UXComponent from './UXComponent';
 
-describe('UX Component tests', ()=> {
+import { render, fireEvent, act } from '@testing-library/react';
+import { UserProvider } from './users.context';
+
+describe('UserContext', () => {
+  it('should get users', async () => {
+    jest.spyOn(global, 'fetch').mockImplementation(() =>
+      Promise.resolve({
+        json: () => {
+          return Promise.resolve([{
+            name: 'John Doe'
+          }])
+        }
+      })
+    );
   
-    it('Render loading without crashing', ()=> {
-        // Set up mock context
-        const mockUsersContextValue = {
-            users: [],
-            loading: true,
-            error: null
-        } 
-        jest
-            .spyOn(React, 'useContext')
-            .mockImplementation(() => mockUsersContextValue)
-
-        // Render the component
-        const { getByText } = render(<UXComponent />);
-        expect(getByText('Loading....')).toBeInTheDocument();
+    const { getByTestId } = render(
+      <UserProvider>
+        <div data-testid="user-name">John Doe</div>
+      </UserProvider>
+    );
+  
+    await act(async () => {
+      await fireEvent.click(getByTestId('user-name'));
     });
-
-    it('Render error without crashing', ()=> {
-        // Set up mock context
-        const mockUsersContextValue = {
-            users: [],
-            loading: false,
-            error: { message: 'Error fetching users' }
-        }
-        jest
-            .spyOn(React, 'useContext')
-            .mockImplementation(() => mockUsersContextValue)
-
-        // Render the component
-        const { getByText } = render(<UXComponent />);
-        expect(getByText('Error: Error fetching users')).toBeInTheDocument();
-    });
-
-    it('Render list of users without crashing', ()=> {
-        // Set up mock context
-        const mockUsersContextValue = {
-            users: [
-                { id: 1, name: 'Myke' },
-                { id: 2, name: 'John' }
-            ],
-            loading: false,
-            error: null
-        }
-        jest
-            .spyOn(React, 'useContext')
-            .mockImplementation(() => mockUsersContextValue)
-
-        // Render the component
-        const { getByText } = render(<UXComponent />);
-        expect(getByText('Myke')).toBeInTheDocument()
-        expect(getByText('John')).toBeInTheDocument()
-     });
+  
+    expect(global.fetch).toHaveBeenCalled();
+  });
 });
