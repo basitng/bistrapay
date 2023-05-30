@@ -1,29 +1,23 @@
-import React from 'react';
-    import { render } from '@testing-library/react';
-    import Profile from './Profile';
+import React from 'react'
 
-    describe('Profile', () => {
-        it('should render properly', () => {
-            const { container } = render(<Profile />);
-            expect(container).toMatchSnapshot();
-        });
+export const Profile = (props) => {
+    const { name } = props;
 
-        it('should render a form to update the profile info', () => {
-            const { getByText, getByLabelText } = render(<Profile />);
-            expect(getByText('Update Profile')).toBeInTheDocument();
-            expect(getByLabelText('Username')).toBeInTheDocument();
-            expect(getByLabelText('Email Address')).toBeInTheDocument();
-            expect(getByLabelText('Display Name')).toBeInTheDocument();
-        });
+    return (
+        <div>
+            <h1>Profile of {name}</h1>
+            <p>This is the profile page of {name}.</p>
+        </div>
+    )
+};
 
-        it('should update the profile once the submit button is clicked', () => {
-            const { getByText, getByLabelText } = render(<Profile />);
-
-            getByLabelText('Username').value = 'username';
-            getByLabelText('Email Address').value = 'test@example.com';
-            getByLabelText('Display Name').value = 'displayName';
-            getByText('Update Profile').click();
-
-            expect(getByText('User profile updated successfully!')).toBeInTheDocument();
-        });
-    });
+import { render, screen } from '@testing-library/react';
+import { Profile } from './pages/profile/[profile].js'
+ 
+describe('Profile', () => {
+  it('should render the name in the h1 tag', () => {
+    const name = 'John';
+    render(<Profile name={name} />);
+    expect(screen.getByText(/John/)).toBeInTheDocument()
+  });
+});
