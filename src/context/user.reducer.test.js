@@ -1,51 +1,35 @@
 import React from 'react';
-import { render, cleanup, fireEvent, waitForElement } from 'react-testing-library';
-import { UserReducer } from './user.reducer';
+import { reducer, initialState } from "../context/user.reducer";
+import { LOGIN_SUCCESS, LOGOUT } from '../constants';
 
-describe('UserReducer', () => {
-    afterEach(cleanup);
+describe('user reducer', () => {
+    it('should set loggedin to true when LOGIN_SUCCESS is called', () => {
+        const action = {
+            type: LOGIN_SUCCESS
+        }
 
-    const initialState = {
-        userName: '',
-        userId: '',
-        isLoggedIn: false,
-    };
+        const expectedState = {
+            ...initialState,
+            loggedIn: true
+        }
 
-    it('should return the initial state when no action is provided', () => {
-        const newState = UserReducer(undefined, {});
-        expect(newState).toEqual(initialState);
+        expect(reducer(initialState, action)).toEqual(expectedState);
     });
 
-    it('should set username when action type is SET_USERNAME', () => {
-        const testUserName = 'TestUser';
+    it('should set loggedin to false when LOGOUT is called', () => {
+        state = {
+            ... initialState,
+            loggedIn: true
+        }
         const action = {
-            type: 'SET_USERNAME',
-            userName: testUserName,
-        };
-        const resultState = { ...initialState, userName: testUserName };
-        const newState = UserReducer(undefined, action);
-        expect(newState).toEqual(resultState);
-    });
+            type: LOGOUT
+        }
 
-    it('should set userId when action type is SET_USER_ID', () => {
-        const testUserId = '123';
-        const action = {
-            type: 'SET_USER_ID',
-            userId: testUserId,
-        };
-        const resultState = { ...initialState, userId: testUserId };
-        const newState = UserReducer(undefined, action);
-        expect(newState).toEqual(resultState);
-    });
+        const expectedState = {
+            ...state,
+            loggedIn: false
+        }
 
-    it('should set isLoggedIn when action type is SET_IS_LOGGED_IN', () => {
-        const testIsLoggedIn = true;
-        const action = {
-            type: 'SET_IS_LOGGED_IN',
-            isLoggedIn: testIsLoggedIn,
-        };
-        const resultState = { ...initialState, isLoggedIn: testIsLoggedIn };
-        const newState = UserReducer(undefined, action);
-        expect(newState).toEqual(resultState);
+        expect(reducer(state, action)).toEqual(expectedState);
     });
 });
