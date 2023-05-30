@@ -1,22 +1,17 @@
 import React from 'react';
- 
-const MyApp = props => {
-    return (
-        <div>
-            <h2>Hello World!</h2>
-            <p>Welcome to my awesome component!</p>
-        </div>
-    );
-}
- 
-export default MyApp
-
-import { render } from '@testing-library/react';
- 
-describe('MyApp', () => {
-    it('should render the corrrect content', () => {
-        const { getByText } = render(<MyApp />);
-        expect(getByText('Hello World!')).toBeInTheDocument();
-        expect(getByText('Welcome to my awesome component!')).toBeInTheDocument(); 
-    });
-});
+        import { render } from 'react-testing-library';
+    
+        function App(){
+           return (
+    	      <div>
+                <h1 className="Heading">Welcome to our App</h1>
+    	     </div> 
+           )
+        }
+    
+        //Writing a unit test using react-testing-library
+        test('renders App component', () => {
+          const { getByText } = render(<App />);
+          const headingElement = getByText(/Welcome to our App/i);
+          expect(headingElement).toBeInTheDocument();  
+        });
