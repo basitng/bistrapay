@@ -1,19 +1,28 @@
 import React from 'react';
-    import { render } from '@testing-library/react';
-    
-    const App = () => {
-    return (
-        <div>
-        <h1>Welcome</h1>
-        <p>This is App component.</p>
-        </div>
-    );
-    }
-    
-    describe("App component", () => {
-    it("should render a heading and a paragarph", () => {
-        const { getByText } = render(<App />);
-        expect(getByText("Welcome")).toBeInTheDocument();
-        expect(getByText("This is App component.")).toBeInTheDocument();
-    });
-    });
+
+function App() {
+  return (
+    <>
+      <h1>Welcome to my React App</h1>
+      <button>Click Me!</button>
+    </>
+  );
+}
+
+export default App;
+
+// Using React Testing Library
+import React from 'react';
+import { render, fireEvent, screen } from '@testing-library/react';
+
+test('renders correctly', () => {
+  render(<App />);
+
+  const title = screen.getByText('Welcome to my React App');
+  const button = screen.getByText('Click Me!');
+
+  expect(title).toBeInTheDocument();
+  expect(button).toBeInTheDocument();
+
+  fireEvent.click(button);
+});
