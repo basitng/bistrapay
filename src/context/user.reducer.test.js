@@ -1,52 +1,35 @@
-// Test Library: Jest 
+import { userReducer } from '../reducers/user.reducer';
 
-describe('User Reducer', () => {
-  it('should return the initial state', () => {
-    const initialState = {
-      user: {
-        id: '',
-        name: '',
-      },
-      loading: false
-    }
+    describe('userReducer test', () => {
+        test('returns the initial state', () => {
+            expect(userReducer(undefined, {})).toEqual({userList:[]});
+        });
 
-    expect(userReducer(undefined, {})).toEqual(initialState)
-  })
+        test('adds new users to userList state', () => {
+            const user = {
+                id: '123',
+                name: 'John Doe'
+            };
+            const expectedResult = {
+                userList: [user]
+            };
 
-  it('should set loading state when log in', () => {
-    const loadingState = {
-      user: {
-        id: '',
-        name: '',
-      },
-      loading: true
-    }
+            expect(userReducer(undefined, {type: ADD_USER, user})).toEqual(expectedResult);
+        });
 
-    const action = {
-      type: LOG_IN
-    }
+        test('Removing users from userList state', () => {
+            const user = {
+                id: '123',
+                name: 'John Doe'
+            };
+            const initialState = {
+                userList: [user]
+            };
 
-    expect(userReducer({}, action)).toEqual(loadingState)
-  })
+            const expectedResult = {
+                userList: []
+            };
 
-  it('should update user when log in success', () => {
-
-    const newUser = {
-      id: '123',
-      name: 'John Doe'
-    }
-
-    const successState = {
-      user: newUser,
-      loading: false
-    }
-
-    const action = {
-      type: LOG_IN_SUCCESS,
-      payload: newUser
-    }
-
-    expect(userReducer({}, action)).toEqual(successState)
-    
-  })
-})
+            expect(userReducer(initialState, {type: REMOVE_USER, user})).toEqual(expectedResult);
+        });
+    });
