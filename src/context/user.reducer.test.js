@@ -1,41 +1,52 @@
-import React from 'react';
-import { render, fireEvent, cleanup } from '@testing-library/react';
-import userReducer from './user.reducer';
+// Test Library: Jest 
 
-// Your Code - Unit Test
-// Using react-testing-library
-
-describe("User Reducer Unit Test", () => {
-  let initialState
-  beforeEach(() => {
-    initialState={
-      userInfo: null,
+describe('User Reducer', () => {
+  it('should return the initial state', () => {
+    const initialState = {
+      user: {
+        id: '',
+        name: '',
+      },
       loading: false
-    };
-  });
+    }
 
-it("Should return initial state", () => {
-  const newState = userReducer(initialState, {});
-  expect(newState).toEqual(initialState);
-})
+    expect(userReducer(undefined, {})).toEqual(initialState)
+  })
 
-it("Should return new state if receiving type", () => {
-  const newState = userReducer(initialState, {
-    type: "USER_LOADING",
-    payload: true
-  });
-  expect(newState).toEqual({userInfo: null, loading: true});
-})
+  it('should set loading state when log in', () => {
+    const loadingState = {
+      user: {
+        id: '',
+        name: '',
+      },
+      loading: true
+    }
 
-it("Should return new state if receiving type", () => {
-  const payload = {
-    id: 1,
-    name: "John Doe"
-  }
-  const newState = userReducer(initialState, {
-    type: "USER_INFO",
-    payload
-  });
-  expect(newState).toEqual({userInfo: payload, loading: false});
+    const action = {
+      type: LOG_IN
+    }
+
+    expect(userReducer({}, action)).toEqual(loadingState)
+  })
+
+  it('should update user when log in success', () => {
+
+    const newUser = {
+      id: '123',
+      name: 'John Doe'
+    }
+
+    const successState = {
+      user: newUser,
+      loading: false
+    }
+
+    const action = {
+      type: LOG_IN_SUCCESS,
+      payload: newUser
+    }
+
+    expect(userReducer({}, action)).toEqual(successState)
+    
+  })
 })
-});
