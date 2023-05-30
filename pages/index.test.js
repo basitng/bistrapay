@@ -1,8 +1,27 @@
-//using jest to write the unit test
-    describe('Index page', () => {
-        test('Determine if the page is rendered correctly', () => {
-            //generate a mock of the component
-            const renderedComponent = shallow(<Index />);
-            expect(renderedComponent).toMatchSnapshot();
+import React from "react";
+    import {shallow} from "enzyme";
+    import Header from "../components/Header";
+
+    describe("Header component", () => {
+        it("Should render a header tagged div", () => {
+            // arrange
+            const component = shallow(<Header />);
+    
+            // act
+            const wrapper = component.find("div.Header");
+    
+            // assert
+            expect(wrapper.length).toBe(1);
         });
+
+        it("Should render a logo", () => {
+            // arrange
+            const component = shallow(<Header />);
+    
+            // act
+            const wrapper = component.find("Logo");
+    
+            // assert
+            expect(wrapper.length).toBe(1);
+        });     
     });
