@@ -1,45 +1,23 @@
 import React from 'react';
 
-     export const Hello = () => {
-       const [message, setMessage] = React.useState('Welcome to React');
+function Hello() {
+  return (
+    <h1>Hello World</h1>
+  );
+}
 
-       return (
-         <div>
-           <div className="message">{message}</div>
-           <button onClick={() => setMessage('Hello From React!')}>
-             Click Me
-           </button>
-         </div>
-       );
-     };
+export default Hello;
 
+//unit test
+import React from 'react';
+import { render, cleanup } from '@testing-library/react';
+// import the Hello component
+import Hello from '../pages/api/hello';
 
-      import React from 'react';
-      import { render, fireEvent, screen } from '@testing-library/react';
-      import { Hello } from './Hello';
-
-      //Author: John Doe
-      //Date: mm/dd/yyyy
-
-      describe('Hello', () => {
-        //Arrange
-        beforeEach(() => {
-          render(<Hello />);
-        });
-
-        it('are the correct initial message is displayed', () => {
-           //Act
-           const messageElement = screen.getByText(/Welcome to React/i);
-          
-           //Assert
-           expect(messageElement).toBeInTheDocument();
-        });
-
-        it('are the updated message is displayed after clicking the button', () => {
-           //Act
-           fireEvent.click(screen.getByText(/Click Me/i));
-
-           //Assert
-          expect(screen.getByText(/Hello From React/i)).toBeInTheDocument();
-        });
-      });
+describe('<Hello />', () => {
+    afterEach(cleanup);
+    it('should render the greeting "Hello World" inside an h1', () => { 
+        const { getByTestId } = render(<Hello />);
+        expect(getByTestId('hello-greeting').textContent).toBe('Hello World');
+    }); 
+});
