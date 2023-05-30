@@ -1,14 +1,20 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, waitForElement } from '@testing-library/react';
 import Index from './index';
 
-afterEach(cleanup);
-
 describe('Index Component', () => {
-    
-    it('renders without crashing', () => {
-        const { getByText } = render(<Index />);
-        const linkElement = getByText(/Index/i);
-        expect(linkElement).toBeInTheDocument();
+ 
+    afterEach(cleanup);
+
+    it("it should render index component successfully", () => {
+        const { container } = render(<Index />);
+        expect(container).toBeInTheDocument();
     });
+
+    it("it should contain 'Welcome to React App' text", async () => {
+        const { findByText } = render(<Index />);
+        const welcomeText = await waitForElement(() => findByText("Welcome to React App"));
+        expect(welcomeText).toBeInTheDocument();
+    });
+
 });
