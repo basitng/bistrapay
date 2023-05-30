@@ -1,14 +1,22 @@
-import React from 'react'
-    import {render} from 'react-testing-library'
-    
-    const App = () => {
-        return (<div>Header</div>)
-    }
-    
-    describe('App Component', () => {
-        it('Should display the Header ', () => {
-            const { getByText } = render(<App />);
-            const header = getByText(/header/i);
-            expect(header).toBeInTheDocument();
-        });
+import React from 'react';
+ 
+const MyApp = props => {
+    return (
+        <div>
+            <h2>Hello World!</h2>
+            <p>Welcome to my awesome component!</p>
+        </div>
+    );
+}
+ 
+export default MyApp
+
+import { render } from '@testing-library/react';
+ 
+describe('MyApp', () => {
+    it('should render the corrrect content', () => {
+        const { getByText } = render(<MyApp />);
+        expect(getByText('Hello World!')).toBeInTheDocument();
+        expect(getByText('Welcome to my awesome component!')).toBeInTheDocument(); 
     });
+});
