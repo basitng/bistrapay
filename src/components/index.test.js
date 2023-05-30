@@ -1,19 +1,12 @@
 import React from 'react';
+import {render} from '@testing-library/react';
+import Index from './index';
 
-const Header = () => (
-    <div>
-        <h1>Header</h1>
-    </div>
-);
-
-export default Header;
-
-import React from "react";
-import { render, screen } from "@testing-library/react";
-
-describe('Header', () => {
-  it('contains header element', () => {
-    render(<Header />);
-    expect(screen.getByText("Header")).toBeInTheDocument();
-  });
+describe('Testing the Index page component', () => {
+    test('Index renders correctly', () => {
+        const {getByText, getByTestId} = render(<Index />);
+        const titleTestElement = getByTestId('title-test');
+        expect(titleTestElement).toBeInTheDocument();
+        expect(getByText('Index page')).toBeInTheDocument();
+    });
 });
