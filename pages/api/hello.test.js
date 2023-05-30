@@ -1,19 +1,31 @@
-import React from 'react';
-    
-    const Hello = () => {
-      return <div>Hello World!</div>;
-    }
-    
-    export default Hello;
-    
-    // Unit Test Code
-    import React from 'react';
-    import {render} from 'react-testing-library';
-    
-    import Hello from './pages/api/hello';
-    
-    // Test to confirm that the hello component is rendered correctly
-    it('should render the hello world text', () => {
-        const { getByText } = render(<Hello />);
-        expect(getByText('Hello World!')).toBeInTheDocument();
-    });
+import React from "react";
+
+const HelloPage = () => {
+  return (
+    <div>
+      <h1>Hello World!</h1>
+      <p>Welcome to my page.</p>
+    </div>
+  );
+};
+
+export default HelloPage;
+
+// React Testing Library Unit Test for HelloPage Component
+import { render } from "@testing-library/react";
+import React from "react";
+import HelloPage from "pages/api/hello";
+
+describe("HelloPage", () => {
+  test("renders page header", () => {
+    const { getByText } = render(<HelloPage />);
+    const headerElement = getByText("Hello World!");
+    expect(headerElement).toBeInTheDocument();
+  });
+
+  test("renders welcome message", () => {
+    const { getByText } = render(<HelloPage />);
+    const messageElement = getByText("Welcome to my page.");
+    expect(messageElement).toBeInTheDocument();
+  });
+});
