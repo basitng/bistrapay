@@ -1,28 +1,31 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import NavBar from '../components/NavBar';
+    import {render, fireEvent, cleanup } from '@testing-library/react'
+    import NavBar from './NavBar';
+    
+    // Test 
+    describe("NavBar component test", () => {
+        afterEach(cleanup);
 
-describe('Nav Bar Component', () => {
-    it('should change the navigation bar on click ', () => {
-        //Arrange
-        const navBarItems = [{
-            title: 'Home',
-            path: '/home'
-        }, {
-            title: 'Dashboard',
-            path: '/dashboard'
-        }]
+        it ("Renders nav without crashing", () => {
+            const { getByTestId } =  render(<NavBar />)
+            const navBar = getByTestId('NavBar');
+            expect(navBar).not.toBeNull();
+        });
+    
+        it("Should display a NavBar with lists of items when clicked on hamburger icon",  () => {
+            const { getByTestId, getByText } =  render(<NavBar />);
+            const hamburgerIcon = getByTestId('hamburgerIcon');
+            fireEvent.click(hamburgerIcon);
+            const listItems = getByTestId('nav-list');
+            expect(listItems).not.toBeNull();
+        });
 
-        const { getByTestId } = render(<NavBar navBarItems={navBarItems} />);
+        it("Should call a onClick function", () => {
+            const onClickFn = jest.fn();
+            const { getByTestId } =  render(<NavBar onClick={onClickFn} />);
+            const hamburgerIcon = getByTestId('hamburgerIcon');
+            fireEvent.click(hamburgerIcon);
+            expect(onClickFn).toHaveBeenCalled(); 
+        });
 
-        //Act
-        const homeNavButton = getByTestId('navbar-home');
-        fireEvent.click(homeNavButton);
-        const dashboardNavButton = getByTestId('navbar-dashboard');
-        fireEvent.click(dashboardNavButton);
-
-        //Assert
-        expect(getByTestId('navbar-home')).not.toHaveClass('active');
-        expect(getByTestId('navbar-dashboard')).toHaveClass('active');
     });
-});
